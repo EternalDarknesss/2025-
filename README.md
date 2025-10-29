@@ -1,7 +1,6 @@
 ну вообщем вот код, остальное не хочу чет :D
 
 
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,8 +79,8 @@
       </div>
 
       <div class="filters" aria-hidden="false">
-        <button class="ghost" id="show-favs" title="Show saved favorites">❤ Favorites <span id="fav-count" style="margin-left:6px;color:var(--muted)">0</span></button>
-        <button class="ghost" id="post-job">Post a job</button>
+        <button class="ghost" id="show-favs" title="Show saved favorites">❤ Сохраненнные <span id="fav-count" style="margin-left:6px;color:var(--muted)">0</span></button>
+        <button class="ghost" id="post-job">Опубликовать вакансию</button>
       </div>
     </header>
 
@@ -89,11 +88,11 @@
       <div class="searchbox" style="align-items:center">
         <input id="q" type="search" placeholder="Поиск работы школьникам" aria-label="Search jobs" />
         <select id="type" aria-label="Job type">
-          <option value="">Any type</option>
-          <option value="part-time">Part-time</option>
-          <option value="internship">Internship</option>
-          <option value="volunteer">Volunteer</option>
-          <option value="gig">Gig</option>
+          <option value="">Любая категория</option>
+          <option value="part-time">Разгрузка</option>
+          <option value="internship">Расфасовщик</option>
+          <option value="volunteer">Помощник</option>
+          <option value="gig">Тестировщик</option>
         </select>
         <input id="location" type="search" placeholder="Локация (город/из дома)" aria-label="Location" />
         <button class="btn" id="searchBtn" aria-label="Search">Поиск</button>
@@ -102,7 +101,7 @@
       <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
         <div style="display:flex;gap:8px">
           <label style="display:flex;align-items:center;gap:6px"><small class="muted">Возраст:</small>
-            <input id="age" type="number" min="14" max="18" placeholder="?" style="width:84px" aria-label="Your age" />
+            <input id="age" type="number" min="14" max="17" placeholder="?" style="width:84px" aria-label="Your age" />
           </label>
           <select id="maxHours" aria-label="Max hours per week" title="Max hours per week">
             <option value="">Любое количество часов</option>
@@ -176,13 +175,13 @@
         <input id="appName" type="text" required placeholder="Навальный Анатолий Анатольевич" />
 
         <label for="appEmail">Email</label>
-        <input id="appEmail" type="email" required placeholder="AlekseyNavalni04061974.mail.ru" />
+        <input id="appEmail" type="email" required placeholder="AlekseyNavalni04061974@mail.ru" />
 
         <label for="appAge">Возраст</label>
         <input id="appAge" type="number" required min="13" max="99" placeholder="14" />
 
         <label for="appNote">Короткое сообщение+Ваши скиллы</label>
-        <textarea id="appNote" placeholder="Я хорош в..."></textarea>
+        <textarea id="appNote" placeholder="Я хорош(а) в..."></textarea>
 
         <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
           <button type="button" class="ghost" id="cancelApply">Закрыть</button>
@@ -235,7 +234,7 @@
         title: 'Рукоделие и продажа изделий.',
         location: 'Ваш дом',
         type: 'Ручная работа',
-        remote: true,
+        remote: false,
         hoursPerWeek: 0,
         МинимальныйВозраст: 16,
         description: 'Продаешь изделия на заказ и получаешь деньги в конце дня',
@@ -247,7 +246,7 @@
         company: 'Valve',
         location: 'Ваш дом',
         type: 'Тестировщик',
-        remote: true,
+        remote: false,
         hoursPerWeek: 10,
         МинимальныйВозраст: 14,
         description: 'Тестируете приложение. Ищите наличие багов/недочетеов/ошибок и сообщаете о них работодателю',
@@ -388,10 +387,10 @@
       const idx = favs.indexOf(id);
       if (idx === -1){
         favs.push(id);
-        button.setAttribute('aria-pressed','true'); button.textContent = '✓ Saved';
+        button.setAttribute('aria-pressed','true'); button.textContent = '✓ Сохраненно';
       } else {
         favs.splice(idx,1);
-        button.setAttribute('aria-pressed','false'); button.textContent = '❤ Save';
+        button.setAttribute('aria-pressed','false'); button.textContent = '❤ Сохранить';
       }
       saveFavorites(favs);
     }
@@ -404,7 +403,7 @@
 
     function openApplyModal(jobId){
       const job = jobsData.find(j => j.id === jobId);
-      modalTitle.textContent = 'Apply — ' + job.title;
+      modalTitle.textContent = 'Откликнуться на - ' + job.title;
       jobIdField.value = jobId;
       modal.style.display = 'flex';
       modal.setAttribute('aria-hidden','false');
@@ -465,6 +464,9 @@
     });
 
     window.TeenHustle = { jobsData, performSearch, showFavorites, loadFavorites, saveFavorites };
+  </script>
+</body>
+</html>
   </script>
 </body>
 </html>
