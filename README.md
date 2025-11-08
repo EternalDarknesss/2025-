@@ -1,39 +1,48 @@
-ну вообщем вот код, остальное не хочу чет :D
-
+итоги бета тест дота 2 я так чувствую
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Teen Hustle — Teen Job Search (Prototype)</title>
+  <title>Teen Hustle — Поиск работы для подростков</title>
 
   <style>
     :root{
       --bg:#0f1724; --card:#0b1220; --accent:#08a0ff; --muted:#98a6b2; --glass: rgba(255,255,255,0.03);
       --max-width:1100px; --radius:12px; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:
-      linear-gradient(180deg,#071124 0%, #041325 60%); color:#e6eef6;}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;background:linear-gradient(180deg,#071124 0%, #041325 60%); color:#e6eef6;}
     .wrap{max-width:var(--max-width);margin:28px auto;padding:20px;}
     header{display:flex;gap:20px;align-items:center;justify-content:space-between}
     .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:12px;background:
-      linear-gradient(135deg,#0ea5e9,#7c3aed);display:grid;place-items:center;font-weight:700;color:#021025}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);display:grid;place-items:center;font-weight:700;color:#021025}
     h1{font-size:1.35rem;margin:0}
     p.lead{margin:0;color:var(--muted);font-size:0.95rem}
 
+    .profile-container{position:fixed;top:20px;right:20px;display:flex;align-items:center;gap:12px;z-index:1000;background:var(--card);padding:10px 15px;border-radius:var(--radius);border:1px solid rgba(255,255,255,0.05);box-shadow:0 4px 12px rgba(0,0,0,0.3);backdrop-filter:blur(10px)}
+    .profile-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#0ea5e9);display:flex;align-items:center;justify-content:center;font-weight:600;color:#021025;cursor:pointer;border:2px solid rgba(255,255,255,0.1);transition:all 0.3s ease;font-size:0.9rem}
+    .profile-avatar:hover{border-color:var(--accent);transform:scale(1.05)}
+    .profile-info{display:flex;flex-direction:column;align-items:flex-end}
+    .profile-name{font-weight:600;font-size:0.9rem;color:#e6eef6}
+    .profile-status{font-size:0.75rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+    .status-dot{width:6px;height:6px;border-radius:50%;background:#10b981}
+    .profile-dropdown{position:absolute;top:100%;right:0;margin-top:10px;background:var(--card);border-radius:var(--radius);padding:12px;min-width:200px;box-shadow:0 10px 25px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.05);display:none;z-index:1001}
+    .profile-dropdown.show{display:block}
+    .dropdown-header{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);margin-bottom:8px}
+    .dropdown-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:var(--muted);text-decoration:none;transition:all 0.2s ease;cursor:pointer}
+    .dropdown-item:hover{background:var(--glass);color:#e6eef6}
+    .dropdown-divider{height:1px;background:rgba(255,255,255,0.05);margin:8px 0}
+
     .controls{display:grid;grid-template-columns:1fr 320px;gap:16px;margin:18px 0}
     .searchbox{background:var(--glass);padding:12px;border-radius:12px;display:flex;gap:8px;align-items:center}
-    input[type="search"], select, input[type="number"]{
-      background:transparent;border:0;color:inherit;font-size:0.95rem;outline:none;padding:6px 8px;width:100%;
-    }
+    input[type="search"], select, input[type="number"]{background:transparent;border:0;color:inherit;font-size:0.95rem;outline:none;padding:6px 8px;width:100%}
     button.btn{background:var(--accent);border:0;padding:10px 12px;border-radius:10px;color:#021025;font-weight:600;cursor:pointer}
     button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:10px;color:var(--muted)}
     .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
 
-    main{display:grid;grid-template-columns: 1fr 360px;gap:20px}
+    main{display:grid;grid-template-columns:1fr 360px;gap:20px}
     .job-list{display:grid;gap:12px}
     .job{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;display:flex;gap:12px;align-items:flex-start}
     .job .meta{flex:1}
@@ -65,13 +74,16 @@
       .controls{grid-template-columns:1fr;align-items:start}
       .filters{justify-content:flex-start}
     }
+    @media (max-width:768px){
+      .profile-container{position:static;margin-top:10px;align-self:flex-end}
+    }
   </style>
 </head>
 <body>
   <div class="wrap" role="application" aria-labelledby="title">
     <header>
       <div class="brand">
-        <div class="logo" aria-hidden="true">TH</div>
+        <div class="logo" aria-hidden="true">TH❤</div>
         <div>
           <h1 id="title">Teen Hustle</h1>
           <p class="lead">Поиск работы подросткам</p>
@@ -83,6 +95,30 @@
         <button class="ghost" id="post-job">Опубликовать вакансию</button>
       </div>
     </header>
+
+    <div class="profile-container">
+      <div class="profile-info">
+        <div class="profile-name">Данила Шипиганович</div>
+        <div class="profile-status">
+          <div class="status-dot"></div>
+          <span>В сети</span>
+        </div>
+      </div>
+      <div class="profile-avatar" id="profileToggle">ДШ</div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="dropdown-header">
+          <strong>Danila.Shipiganovich</strong>
+          <div style="font-size:0.8rem;color:var(--muted);margin-top:4px">schpigpnowi4.danick@mail.ru</div>
+        </div>
+        <div class="dropdown-item">❗❗ Соискатель</div>
+        <div class="dropdown-item">👤 Мой профиль</div>
+        <div class="dropdown-item">❤ Сохраненнные</div>
+        <div class="dropdown-item">📋 Мои заявки</div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item">⚙ Настройки</div>
+        <div class="dropdown-item">🚪 Выйти</div>
+      </div>
+    </div>
 
     <div class="controls" role="search" aria-label="Job search and filters">
       <div class="searchbox" style="align-items:center">
@@ -121,8 +157,7 @@
       <section aria-labelledby="results-title">
         <h2 id="results-title" style="font-size:1.05rem;margin:6px 0 12px 0">Результат:</h2>
 
-        <div class="job-list" id="jobs" role="list" aria-live="polite">
-        </div>
+        <div class="job-list" id="jobs" role="list" aria-live="polite"></div>
 
         <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
           <button class="ghost" id="loadMore">Загрузить больше вакансий</button>
@@ -172,17 +207,13 @@
       <form id="applyForm" novalidate>
         <input type="hidden" id="jobId" />
         <label for="appName">ФИО</label>
-        <input id="appName" type="text" required placeholder="Навальный Анатолий Анатольевич" />
-
+        <input id="appName" type="text" required placeholder="Данила Олегович Шипиганович" />
         <label for="appEmail">Email</label>
-        <input id="appEmail" type="email" required placeholder="AlekseyNavalni04061974@mail.ru" />
-
+        <input id="appEmail" type="email" required placeholder="schpigpnowi4.danick@mail.ru" />
         <label for="appAge">Возраст</label>
         <input id="appAge" type="number" required min="13" max="99" placeholder="14" />
-
-        <label for="appNote">Короткое сообщение+Ваши скиллы</label>
+        <label for="appNote">Короткое сообщение+Ваши скиллы(+Если имеется резюме то желательно прикрепить через "ЯндексДиск".)</label>
         <textarea id="appNote" placeholder="Я хорош(а) в..."></textarea>
-
         <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
           <button type="button" class="ghost" id="cancelApply">Закрыть</button>
           <button type="submit" class="btn">Отправить</button>
@@ -192,66 +223,29 @@
   </div>
 
   <script>
-    const jobsData = [
-      {
-        id: 'j1',
-        title: 'Выгрузка фуры.',
-        company: 'Магнит',
-        location: 'ул. Братиславская, 14, Москва',
-        type: 'разгрузка',
-        remote: false,
-        hoursPerWeek: 0,
-        МинимальныйВозраст: 14,
-        description: 'Выгружаете фуру - получаете деньги за смену',
-        tags: ['Физическая работа','Оплата за выполненную работу']
-      },
-      {
-        id: 'j2',
-        title: 'Упаковщик-комплектовщик.',
-        company: 'Мармеладыч',
-        location: 'ул. Матросова, 134, Тольятти',
-        type: 'Расфасовщик',
-        remote: false,
-        hoursPerWeek: 8,
-        МинимальныйВозраст:16,
-        description: 'Расфасовываете товар по выданному примеру',
-        tags: ['Внимательность','Монотонная работа']
-      },
-      {
-        id: 'j3',
-        title: 'Выгульщик Собак и/или Няня для домашних животных.',
-        location: 'Выезд на адрес',
-        type: 'Помощник',
-        remote: false,
-        hoursPerWeek: 0,
-        МинимальныйВозраст: 14,
-        description: 'Выгуливаешь собак/сидишь с домашними животными и получаешь оплату в конце недели',
-        tags: ['Животные','Няня для животных','Договорные часы работы'
-        ]
-      },
-      {
-        id: 'j4',
-        title: 'Рукоделие и продажа изделий.',
-        location: 'Ваш дом',
-        type: 'Ручная работа',
-        remote: false,
-        hoursPerWeek: 0,
-        МинимальныйВозраст: 16,
-        description: 'Продаешь изделия на заказ и получаешь деньги в конце дня',
-        tags: ['Работа на заказ','Удаленная работа','Отправка результата почтой']
-      },
-      {
-        id: 'j5',
-        title: 'Тестировщик приложений',
-        company: 'Valve',
-        location: 'Ваш дом',
-        type: 'Тестировщик',
-        remote: false,
-        hoursPerWeek: 10,
-        МинимальныйВозраст: 14,
-        description: 'Тестируете приложение. Ищите наличие багов/недочетеов/ошибок и сообщаете о них работодателю',
-        tags: ['Тестировщик','Удаленная работа','Активное общение с работодателем']
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileToggle = document.getElementById('profileToggle');
+      const profileDropdown = document.getElementById('profileDropdown');
+      if (profileToggle && profileDropdown) {
+        profileToggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          profileDropdown.classList.toggle('show');
+        });
+        document.addEventListener('click', function() {
+          profileDropdown.classList.remove('show');
+        });
+        profileDropdown.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
       }
+    });
+
+    const jobsData = [
+      {id:'j1',title:'Выгрузка фуры.',company:'Магнит',location:'ул. Братиславская, 14, Москва',type:'разгрузка',remote:false,hoursPerWeek:0,МинимальныйВозраст:14,description:'Выгружаете фуру - получаете деньги за смену',tags:['Физическая работа','Оплата за выполненную работу']},
+      {id:'j2',title:'Упаковщик-комплектовщик.',company:'Мармеладыч',location:'ул. Матросова, 134, Тольятти',type:'Расфасовщик',remote:false,hoursPerWeek:8,МинимальныйВозраст:16,description:'Расфасовываете товар по выданному примеру',tags:['Внимательность','Монотонная работа']},
+      {id:'j3',title:'Выгульщик Собак и/или Няня для домашних животных.',location:'Выезд на адрес',type:'Помощник',remote:false,hoursPerWeek:0,МинимальныйВозраст:14,description:'Выгуливаешь собак/сидишь с домашними животными и получаешь оплату в конце недели',tags:['Животные','Няня для животных','Договорные часы работы']},
+      {id:'j4',title:'Рукоделие и продажа изделий.',location:'Ваш дом',type:'Ручная работа',remote:false,hoursPerWeek:0,МинимальныйВозраст:16,description:'Продаешь изделия на заказ и получаешь деньги в конце дня',tags:['Работа на заказ','Удаленная работа','Отправка результата почтой']},
+      {id:'j5',title:'Тестировщик приложений',company:'Valve',location:'Ваш дом',type:'Тестировщик',remote:false,hoursPerWeek:10,МинимальныйВозраст:14,description:'Тестируете приложение. Ищите наличие багов/недочетеов/ошибок и сообщаете о них работодателю',tags:['Тестировщик','Удаленная работа','Активное общение с работодателем']}
     ];
 
     let visibleJobs = [];
@@ -282,9 +276,7 @@
     const LS_FAVS = 'teen_hustle_favorites_v1';
 
     function loadFavorites(){
-      try{
-        return JSON.parse(localStorage.getItem(LS_FAVS) || '[]');
-      }catch(e){return [];}
+      try{return JSON.parse(localStorage.getItem(LS_FAVS) || '[]');}catch(e){return [];}
     }
     function saveFavorites(arr){
       localStorage.setItem(LS_FAVS, JSON.stringify(arr));
@@ -371,13 +363,11 @@
       const loc = $location.value.trim();
       const ageVal = $age.value ? Number($age.value) : null;
       const maxHoursVal = $maxHours.value ? Number($maxHours.value) : null;
-
       if (ageVal && ageVal < 13) {
         alert('This platform is designed for ages 13 and up. If you are under 13, please have a parent or guardian help you.');
         $age.focus();
         return;
       }
-
       visibleJobs = jobsData.filter(job => matchesFilter(job, q, type, loc, ageVal, maxHoursVal));
       renderJobs(visibleJobs, true);
     }
@@ -428,7 +418,6 @@
       const jobId = document.getElementById('jobId').value;
       if (!name || !email) { alert('Please complete name and email'); return; }
       if (age < 13) { alert('Applicants must be 13 or older.'); return; }
-
       closeModal();
       alert('Application sent (mock). In production this would submit your application to the employer.');
     });
@@ -467,7 +456,3 @@
   </script>
 </body>
 </html>
-  </script>
-</body>
-</html>
-```
