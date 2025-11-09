@@ -1,5 +1,9 @@
-итоги бета тест дота 2 я так чувствую
+((я так чувствую))
 
+Презентация: https://disk.yandex.ru/i/PoYMpH8-UcJYBw
+P.s.(гитхабу не нравится презентация)
+
+Код:
 <!DOCTYPE html>
 <html lang="ru">
 <head>
