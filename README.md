@@ -1,6 +1,6 @@
 ((я так чувствую))
 
-Презентация: https://disk.yandex.ru/i/PoYMpH8-UcJYBw
+Презентация: https://disk.yandex.ru/i/_OfpJr9Pq2NA7Q
 P.s.(гитхабу не нравится презентация)
 
 Код:
