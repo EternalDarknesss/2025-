@@ -112,7 +112,6 @@
         </div>
         <div class="dropdown-item">❗❗ Соискатель</div>
         <div class="dropdown-item">👤 Мой профиль</div>
-        <div class="dropdown-item">❤ Сохраненнные</div>
         <div class="dropdown-item">📋 Мои заявки</div>
         <div class="dropdown-divider"></div>
         <div class="dropdown-item">⚙ Настройки</div>
@@ -452,6 +451,10 @@
       document.getElementById('results-title').focus && document.getElementById('results-title').focus();
     });
 
+    window.TeenHustle = { jobsData, performSearch, showFavorites, loadFavorites, saveFavorites };
+  </script>
+</body>
+</html>
     window.TeenHustle = { jobsData, performSearch, showFavorites, loadFavorites, saveFavorites };
   </script>
 </body>
