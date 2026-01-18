@@ -280,7 +280,7 @@
           </div>
         </div>
         
-        <label for="appNote">Дополнительная информация (если есть резюме, желательно прикрепить через "Яндекс.Диск")</label>
+        <label for="appNote">Дополнительная информация (если есть резюме, желательно прикрепить через "Google Docs")</label>
         <textarea id="appNote" placeholder="Дополнительные сведения о себе, ссылка на резюме..." rows="2"></textarea>
         
         <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
@@ -701,11 +701,7 @@
         filteredApplications.forEach((app, index) => {
           const job = jobsData.find(j => j.id === app.jobId);
           const resumeExamples = [
-            "https://disk.yandex.ru/d/example-resume-1",
-            "https://disk.yandex.ru/d/example-resume-2",
             "Ссылка на резюме в Google Docs",
-            "Резюме приложено в виде файла PDF",
-            "https://docs.google.com/document/d/example"
           ];
           const randomResume = resumeExamples[Math.floor(Math.random() * resumeExamples.length)];
           
