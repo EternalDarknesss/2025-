@@ -9,7 +9,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Teen Hustle — Поиск работы для подростков 14-17 лет</title>
-
   <style>
     :root{
       --bg:#0f1724; --card:#0b1220; --accent:#08a0ff; --muted:#98a6b2; --glass: rgba(255,255,255,0.03);
@@ -53,28 +52,46 @@
     .filters-section{background:var(--glass);padding:16px;border-radius:12px;margin:18px 0;display:grid;grid-template-columns:repeat(5, 1fr) auto;gap:12px;align-items:end}
     .filter-group{display:flex;flex-direction:column;gap:6px}
     .filter-label{font-size:0.8rem;color:#ffffff;opacity:0.9}
-    .searchbox{display:flex;gap:8px;align-items:center}
-    input[type="search"], select, input[type="number"]{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#ffffff;font-size:0.95rem;outline:none;padding:8px 10px;width:100%;border-radius:8px}
-    input[type="search"]::placeholder, select option, input[type="number"]::placeholder{color:rgba(255,255,255,0.6)}
-    input[type="search"]:focus, select:focus, input[type="number"]:focus{border-color:var(--accent)}
+    input[type="search"], select, input[type="number"], textarea{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#ffffff;font-size:0.95rem;outline:none;padding:8px 10px;width:100%;border-radius:8px}
+    input[type="search"]::placeholder, select option, input[type="number"]::placeholder, textarea::placeholder{color:rgba(255,255,255,0.6)}
+    input[type="search"]:focus, select:focus, input[type="number"]:focus, textarea:focus{border-color:var(--accent)}
     select option{background:#000000;color:#ffffff}
+    textarea{resize:vertical;min-height:80px}
     button.btn{background:var(--accent);border:0;padding:10px 16px;border-radius:10px;color:#021025;font-weight:600;cursor:pointer;transition:opacity 0.2s}
     button.btn:hover{opacity:0.9}
     button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.15);padding:8px 12px;border-radius:10px;color:#ffffff;cursor:pointer;transition:all 0.2s;opacity:0.9}
     button.ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.3);opacity:1}
+    button.chat-btn{background:linear-gradient(135deg,#7c3aed,#0ea5e9);border:none;padding:8px 12px;border-radius:8px;color:#ffffff;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;transition:all 0.3s ease}
+    button.chat-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(124,58,237,0.3)}
     button.reject-btn{background:transparent;border:1px solid rgba(255,100,100,0.5);padding:6px 10px;border-radius:8px;color:#ff6b6b;font-size:0.8rem;cursor:pointer}
     button.reject-btn:hover{background:rgba(255,100,100,0.2);border-color:rgba(255,100,100,0.7)}
+    button.danger-btn{background:rgba(255,100,100,0.2);border:1px solid rgba(255,100,100,0.5);padding:6px 10px;border-radius:8px;color:#ff6b6b;font-size:0.8rem;cursor:pointer}
+    button.danger-btn:hover{background:rgba(255,100,100,0.3);border-color:#ff6b6b}
     .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
 
     main{display:grid;grid-template-columns:1fr 360px;gap:20px}
     .job-list{display:grid;gap:12px}
-    .job{background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));padding:12px;border-radius:10px;display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(255,255,255,0.05)}
+    .job{background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));padding:12px;border-radius:10px;display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(255,255,255,0.05);position:relative;animation:fadeInUp 0.5s ease}
+    .job.employer-job{border-left:3px solid var(--accent)}
+    .job.new-job{border-left:3px solid #10b981;animation:highlight 2s ease}
     .job .meta{flex:1}
-    .job h3{margin:0;font-size:1.05rem;color:#ffffff}
+    .job h3{margin:0;font-size:1.05rem;color:#ffffff;display:flex;align-items:center;gap:8px}
+    .new-badge{background:#10b981;color:#021025;padding:2px 8px;border-radius:20px;font-size:0.7rem;font-weight:600}
     .chips{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
     .chip{background:rgba(255,255,255,0.08);padding:6px 8px;border-radius:999px;font-size:0.82rem;color:#ffffff;opacity:0.9}
-    .job .actions{display:flex;flex-direction:column;gap:8px}
+    .job .actions{display:flex;flex-direction:row;gap:8px;flex-wrap:wrap;align-items:flex-start}
+    .job .btn, .job .ghost, .job .chat-btn{width:auto}
     .job small{color:#ffffff;opacity:0.8}
+    .job-badge{position:absolute;top:10px;right:10px;background:var(--accent);color:#021025;padding:4px 8px;border-radius:20px;font-size:0.7rem;font-weight:600}
+
+    @keyframes fadeInUp {
+      from {opacity:0;transform:translateY(20px)}
+      to {opacity:1;transform:translateY(0)}
+    }
+    @keyframes highlight {
+      0% {background:rgba(16,185,129,0.2)}
+      100% {background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))}
+    }
 
     aside.card{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.05)}
     .card h4{margin:4px 0 10px 0;color:#ffffff}
@@ -83,376 +100,114 @@
     .stat strong{color:#ffffff;font-size:1.2rem}
     .stat div{color:#ffffff;opacity:0.9}
 
-    /* Стили для кандидатов */
-    .candidate-item {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 16px;
-      transition: all 0.3s ease;
-    }
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;margin-bottom:6px;color:#ffffff;font-size:0.9rem}
+    .form-group input, .form-group select, .form-group textarea{width:100%}
+    .tags-input-container{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .tag-item{background:rgba(8,160,255,0.2);border:1px solid var(--accent);padding:4px 8px;border-radius:20px;display:flex;align-items:center;gap:6px;font-size:0.85rem}
+    .tag-item button{background:transparent;border:none;color:#ff6b6b;cursor:pointer;font-size:1rem;padding:0 4px}
+    .tag-item button:hover{color:#ff0000}
 
-    .candidate-item:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: var(--accent);
-    }
+    .chat-container{display:flex;flex-direction:column;height:500px;background:rgba(0,0,0,0.2);border-radius:12px}
+    .chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px}
+    .chat-message{display:flex;gap:8px;max-width:80%}
+    .chat-message.own{margin-right:auto}
+    .chat-message.other{margin-left:auto;flex-direction:row-reverse}
+    .message-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#0ea5e9);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.8rem;flex-shrink:0}
+    .message-content{display:flex;flex-direction:column;gap:4px}
+    .message-header{display:flex;align-items:center;gap:8px;font-size:0.8rem}
+    .message-sender{font-weight:600;color:var(--accent)}
+    .chat-message.other .message-sender{color:#10b981}
+    .message-time{opacity:0.6;font-size:0.7rem}
+    .message-bubble{background:rgba(255,255,255,0.1);padding:8px 12px;border-radius:12px;word-wrap:break-word}
+    .chat-message.own .message-bubble{background:var(--accent);color:#021025}
+    .chat-message.other .message-bubble{background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.3)}
+    .chat-input-container{display:flex;gap:8px;padding:16px;border-top:1px solid rgba(255,255,255,0.1)}
+    .chat-input{flex:1}
+    
+    .chat-list{max-height:400px;overflow-y:auto}
+    .chat-list-item{padding:12px;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:12px}
+    .chat-list-item:hover{background:rgba(255,255,255,0.05)}
+    .chat-list-item.active{background:rgba(8,160,255,0.1);border-left:3px solid var(--accent)}
+    .chat-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#0ea5e9);display:flex;align-items:center;justify-content:center;font-weight:600}
+    .chat-info{flex:1}
+    .chat-name{font-weight:600;margin-bottom:4px}
+    .chat-preview{font-size:0.8rem;opacity:0.7}
+    .unread-badge{background:var(--accent);color:#021025;padding:2px 8px;border-radius:20px;font-size:0.7rem;font-weight:600;margin-left:8px}
 
-    .candidate-item.removing {
-      opacity: 0;
-      transform: translateX(20px);
-      transition: all 0.3s ease;
-    }
-
-    .resume-section {
-      background: rgba(8,160,255,0.05);
-      border-radius: 8px;
-      padding: 12px;
-      margin: 12px 0;
-      border-left: 3px solid var(--accent);
-    }
-
-    .resume-section h5 {
-      color: var(--accent);
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
-
-    .resume-content {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-
-    .resume-link {
-      display: inline-block;
-      color: var(--accent);
-      text-decoration: none;
-      padding: 6px 12px;
-      background: rgba(8,160,255,0.1);
-      border-radius: 20px;
-      margin-top: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .resume-link:hover {
-      background: var(--accent);
-      color: #021025;
-    }
-
-    /* Стили для заявок соискателя */
-    .application-item {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 16px;
-      transition: all 0.3s ease;
-    }
-
-    .application-item:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: var(--accent);
-    }
-
-    .application-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .application-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--accent);
-    }
-
-    .application-date {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .application-company {
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 8px;
-    }
-
-    .application-skills {
-      background: rgba(255,255,255,0.02);
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px 0;
-      font-size: 0.9rem;
-    }
-
-    .application-status {
-      display: inline-block;
-      background: rgba(8,160,255,0.1);
-      color: var(--accent);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      margin-top: 8px;
-    }
-
+    .candidate-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius);padding:16px;margin-bottom:16px;transition:all 0.3s ease}
+    .candidate-item:hover{background:rgba(255,255,255,0.05);border-color:var(--accent)}
+    .candidate-item.removing{opacity:0;transform:translateX(20px);transition:all 0.3s ease}
+    .resume-section{background:rgba(8,160,255,0.05);border-radius:8px;padding:12px;margin:12px 0;border-left:3px solid var(--accent)}
+    .resume-section h5{color:var(--accent);margin-bottom:8px;font-size:0.95rem}
+    .resume-content{color:var(--muted);font-size:0.9rem;line-height:1.5}
+    .resume-link{display:inline-block;color:var(--accent);text-decoration:none;padding:6px 12px;background:rgba(8,160,255,0.1);border-radius:20px;margin-top:8px;transition:all 0.2s ease}
+    .resume-link:hover{background:var(--accent);color:#021025}
+    .application-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius);padding:16px;margin-bottom:16px;transition:all 0.3s ease}
+    .application-item:hover{background:rgba(255,255,255,0.05);border-color:var(--accent)}
+    .application-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .application-title{font-size:1.1rem;font-weight:600;color:var(--accent)}
+    .application-date{font-size:0.8rem;color:var(--muted)}
+    .application-company{color:var(--muted);font-size:0.9rem;margin-bottom:8px}
+    .application-skills{background:rgba(255,255,255,0.02);border-radius:8px;padding:10px;margin:10px 0;font-size:0.9rem}
+    .application-status{display:inline-block;background:rgba(8,160,255,0.1);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:0.8rem;margin-top:8px}
+    
     .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.8);display:none;align-items:center;justify-content:center;padding:20px;z-index:2000}
-    .modal{background:#021023;padding:16px;border-radius:12px;max-width:400px;width:100%;border:1px solid rgba(255,255,255,0.1)}
+    .modal{background:#021023;padding:16px;border-radius:12px;max-width:600px;width:100%;border:1px solid rgba(255,255,255,0.1);max-height:90vh;overflow-y:auto}
     .modal header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
     .modal header strong{color:#ffffff}
     .modal form{display:flex;flex-direction:column;gap:10px}
-    .modal input, .modal select{background:transparent;border:1px solid rgba(255,255,255,0.15);padding:10px;border-radius:8px;color:#ffffff}
-    .modal input::placeholder{color:rgba(255,255,255,0.5)}
-    .modal input:focus{border-color:var(--accent);outline:none}
+    .modal input, .modal select, .modal textarea{background:transparent;border:1px solid rgba(255,255,255,0.15);padding:10px;border-radius:8px;color:#ffffff}
+    .modal input::placeholder, .modal textarea::placeholder{color:rgba(255,255,255,0.5)}
+    .modal input:focus, .modal select:focus, .modal textarea:focus{border-color:var(--accent);outline:none}
     
     .login-hint{font-size:0.8rem;opacity:0.7;margin-top:5px;text-align:center}
     .footer-links{display:flex;gap:20px;justify-content:center;margin-top:10px;font-size:0.8rem}
     .footer-links a{color:#ffffff;opacity:0.7;text-decoration:none;cursor:pointer}
     .footer-links a:hover{opacity:1;color:var(--accent)}
-    
     .age-hint{font-size:0.75rem;opacity:0.7;margin-top:2px;text-align:left}
     
-    /* Уведомления */
-    .notification-container {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: 350px;
-    }
-
-    .notification {
-      background: var(--card);
-      border-left: 4px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      animation: slideIn 0.3s ease forwards;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      border: 1px solid rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-    }
-
-    .notification-icon {
-      font-size: 1.5rem;
-      line-height: 1;
-    }
-
-    .notification-content {
-      flex: 1;
-    }
-
-    .notification-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: #ffffff;
-    }
-
-    .notification-message {
-      font-size: 0.9rem;
-      opacity: 0.9;
-      color: #ffffff;
-    }
-
-    .notification-close {
-      background: transparent;
-      border: none;
-      color: rgba(255,255,255,0.5);
-      cursor: pointer;
-      font-size: 1.2rem;
-      padding: 0 4px;
-      transition: color 0.2s;
-    }
-
-    .notification-close:hover {
-      color: #ffffff;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideOut {
-      from {
-        transform: translateX(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-    }
-
-    .notification.fade-out {
-      animation: slideOut 0.3s ease forwards;
-    }
-
-    /* Стили для карточек функций в разработке */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin: 15px 0;
-    }
-
-    .feature-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: var(--radius);
-      padding: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-
-    .feature-card:hover {
-      background: rgba(8,160,255,0.1);
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 8px;
-    }
-
-    .feature-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .feature-desc {
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-
-    .feature-badge {
-      display: inline-block;
-      background: rgba(8,160,255,0.2);
-      color: var(--accent);
-      padding: 4px 8px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      margin-top: 8px;
-    }
-
-    /* Стили для страниц функций */
-    .feature-page {
-      padding: 20px;
-      text-align: center;
-    }
-
-    .feature-page-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
-    }
-
-    .feature-page-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      background: linear-gradient(135deg, #0ea5e9, #7c3aed);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .feature-page-desc {
-      color: var(--muted);
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-
-    .feature-progress {
-      background: rgba(255,255,255,0.05);
-      border-radius: 20px;
-      height: 8px;
-      margin: 20px 0;
-      overflow: hidden;
-    }
-
-    .feature-progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), #7c3aed);
-      width: 30%;
-      border-radius: 20px;
-    }
-
-    .feature-status {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 30px;
-    }
-
-    .feature-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    /* Стили для employer modal */
-    #employerModal .modal {
-      max-width: 600px;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-
-    #employerModal .modal::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    #employerModal .modal::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
-    }
-
-    #employerModal .modal::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 3px;
-    }
-
-    /* Стили для my applications modal */
-    #myApplicationsModal .modal {
-      max-width: 600px;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-
-    #myApplicationsModal .modal::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    #myApplicationsModal .modal::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
-    }
-
-    #myApplicationsModal .modal::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 3px;
-    }
-
-    @media (max-width:960px){
-      main{grid-template-columns:1fr}
-      .filters-section{grid-template-columns:1fr;gap:12px}
-      .filter-group:last-child{grid-column:1;margin-top:8px}
-      .features-grid{grid-template-columns:1fr}
-    }
-    @media (max-width:768px){
-      .profile-container{position:static;margin-top:10px;align-self:flex-end}
-    }
+    .notification-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;max-width:350px}
+    .notification{background:var(--card);border-left:4px solid var(--accent);border-radius:var(--radius);padding:16px;box-shadow:0 5px 15px rgba(0,0,0,0.3);animation:slideIn 0.3s ease forwards;display:flex;align-items:flex-start;gap:12px;border:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(10px)}
+    .notification-icon{font-size:1.5rem;line-height:1}
+    .notification-content{flex:1}
+    .notification-title{font-weight:600;margin-bottom:4px;color:#ffffff}
+    .notification-message{font-size:0.9rem;opacity:0.9;color:#ffffff}
+    .notification-close{background:transparent;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:1.2rem;padding:0 4px;transition:color 0.2s}
+    .notification-close:hover{color:#ffffff}
+    
+    @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+    @keyframes slideOut{from{transform:translateX(0);opacity:1}to{transform:translateX(100%);opacity:0}}
+    .notification.fade-out{animation:slideOut 0.3s ease forwards}
+    
+    .features-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:12px;margin:15px 0}
+    .feature-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius);padding:15px;cursor:pointer;transition:all 0.3s ease;text-align:center}
+    .feature-card:hover{background:rgba(8,160,255,0.1);border-color:var(--accent);transform:translateY(-2px)}
+    .feature-icon{font-size:2rem;margin-bottom:8px}
+    .feature-title{font-weight:600;margin-bottom:4px}
+    .feature-desc{font-size:0.8rem;opacity:0.7}
+    .feature-badge{display:inline-block;background:rgba(8,160,255,0.2);color:var(--accent);padding:4px 8px;border-radius:20px;font-size:0.7rem;margin-top:8px}
+    .feature-page{padding:20px;text-align:center}
+    .feature-page-icon{font-size:4rem;margin-bottom:20px}
+    .feature-page-title{font-size:1.5rem;font-weight:700;margin-bottom:10px;background:linear-gradient(135deg, #0ea5e9, #7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .feature-page-desc{color:var(--muted);margin-bottom:30px;line-height:1.6}
+    .feature-progress{background:rgba(255,255,255,0.05);border-radius:20px;height:8px;margin:20px 0;overflow:hidden}
+    .feature-progress-bar{height:100%;background:linear-gradient(90deg, var(--accent), #7c3aed);width:30%;border-radius:20px}
+    .feature-status{display:flex;justify-content:space-between;color:var(--muted);font-size:0.9rem;margin-bottom:30px}
+    .feature-actions{display:flex;gap:10px;justify-content:center}
+    
+    #employerModal .modal{max-width:600px;max-height:80vh}
+    #myApplicationsModal .modal{max-width:600px;max-height:80vh}
+    #jobFormModal .modal{max-width:700px}
+    #chatModal .modal{max-width:800px}
+    #profileEditModal .modal{max-width:500px}
+    
+    .modal::-webkit-scrollbar{width:6px}
+    .modal::-webkit-scrollbar-track{background:rgba(255,255,255,0.05)}
+    .modal::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+    
+    @media (max-width:960px){main{grid-template-columns:1fr}.filters-section{grid-template-columns:1fr;gap:12px}.features-grid{grid-template-columns:1fr}}
+    @media (max-width:768px){.profile-container{position:static;margin-top:10px;align-self:flex-end}}
   </style>
 </head>
 <body>
@@ -467,9 +222,10 @@
       </div>
 
       <div class="filters" aria-hidden="false">
-        <button class="ghost" id="show-favs" title="Показать сохраненные вакансии">❤ Сохранённые <span id="fav-count" style="margin-left:6px;color:#ffffff;opacity:0.8">0</span></button>
+        <button class="ghost" id="show-favs">❤ Сохранённые <span id="fav-count">0</span></button>
         <button class="ghost" id="action-button">Мои заявки</button>
-        <button class="ghost" id="dev-menu-btn" title="Меню разработки">⚙️ Разработка</button>
+        <button class="ghost" id="chat-menu-btn">💬 Чаты <span id="unread-count">0</span></button>
+        <button class="ghost" id="dev-menu-btn">⚙️ Разработка</button>
       </div>
     </header>
 
@@ -492,41 +248,14 @@
       </div>
     </div>
 
-    <!-- Модальное окно логина -->
-    <div class="modal-backdrop" id="loginModal">
-      <div class="modal">
-        <header>
-          <strong>Вход в профиль</strong>
-          <button class="ghost" id="closeLoginBtn" style="padding:5px 10px;">✕</button>
-        </header>
-        <form id="loginForm">
-          <input type="text" id="loginName" placeholder="Имя и фамилия" required value="Анна Петрова">
-          <input type="email" id="loginEmail" placeholder="Email" required value="anna@example.com">
-          <div style="display:flex;gap:10px;margin:5px 0">
-            <label style="display:flex;align-items:center;gap:5px;">
-              <input type="radio" name="userType" value="seeker" id="userTypeSeeker" checked> Соискатель (14-17 лет)
-            </label>
-            <label style="display:flex;align-items:center;gap:5px;">
-              <input type="radio" name="userType" value="employer" id="userTypeEmployer"> Работодатель (18+)
-            </label>
-          </div>
-          <input type="number" id="loginAge" placeholder="Возраст" min="14" max="17" required value="16">
-          <div class="age-hint" id="ageHint">Для соискателя: от 14 до 17 лет</div>
-          <button type="submit" class="btn">Войти</button>
-          <div class="login-hint">Просим указать свой настоящий возраст, иначе ваш аккаунт может быть удален!(+блокировка по номеру)</div>
-        </form>
-      </div>
-    </div>
-
-    <div class="filters-section" role="search" aria-label="Фильтры поиска работы">
+    <div class="filters-section">
       <div class="filter-group">
-        <div class="filter-label">Поиск по названию</div>
-        <input id="q" type="search" placeholder="Например: выгульщик собак" aria-label="Поиск вакансий" />
+        <div class="filter-label">Поиск</div>
+        <input id="q" type="search" placeholder="Например: выгульщик собак" />
       </div>
-      
       <div class="filter-group">
         <div class="filter-label">Тип работы</div>
-        <select id="type" aria-label="Тип работы">
+        <select id="type">
           <option value="">Любая категория</option>
           <option value="разгрузка">Разгрузка</option>
           <option value="расфасовщик">Расфасовщик</option>
@@ -535,76 +264,61 @@
           <option value="ручная работа">Ручная работа</option>
         </select>
       </div>
-      
       <div class="filter-group">
         <div class="filter-label">Местоположение</div>
-        <input id="location" type="search" placeholder="Город или 'из дома'" aria-label="Местоположение" />
+        <input id="location" type="search" placeholder="Город или 'из дома'" />
       </div>
-      
       <div class="filter-group">
-        <div class="filter-label">Ваш возраст (14-17)</div>
-        <input id="age" type="number" min="14" max="17" placeholder="14-17" aria-label="Ваш возраст" title="Введите возраст от 14 до 17 лет" />
+        <div class="filter-label">Ваш возраст</div>
+        <input id="age" type="number" min="14" max="17" placeholder="14-17" />
       </div>
-      
       <div class="filter-group">
-        <div class="filter-label">Макс. часов в неделю</div>
-        <select id="maxHours" aria-label="Максимум часов в неделю" title="Максимум часов в неделю">
-          <option value="">Любое количество часов</option>
-          <option value="10">≤10 часов в неделю</option>
-          <option value="20">≤20 часов в неделю</option>
-          <option value="30">≤30 часов в неделю</option>
+        <div class="filter-label">Макс. часов</div>
+        <select id="maxHours">
+          <option value="">Любое</option>
+          <option value="10">≤10 ч/нед</option>
+          <option value="20">≤20 ч/нед</option>
+          <option value="30">≤30 ч/нед</option>
         </select>
       </div>
-      
-      <div class="filter-group" style="display:flex;flex-direction:column;gap:8px;justify-content:flex-end;height:100%">
-        <div style="display:flex;gap:8px;justify-content:flex-end">
-          <button class="btn" id="searchBtn" aria-label="Поиск">Поиск</button>
+      <div class="filter-group">
+        <div style="display:flex;gap:8px;">
+          <button class="btn" id="searchBtn">Поиск</button>
           <button class="ghost" id="clear">Очистить</button>
         </div>
       </div>
     </div>
 
     <main>
-      <section aria-labelledby="results-title">
-        <h2 id="results-title" style="font-size:1.05rem;margin:6px 0 12px 0;color:#ffffff">Результат:</h2>
-
-        <div class="job-list" id="jobs" role="list" aria-live="polite"></div>
-
-        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
-          <button class="ghost" id="loadMore">Загрузить больше вакансий</button>
+      <section>
+        <h2 id="results-title">Результат:</h2>
+        <div class="job-list" id="jobs"></div>
+        <div style="margin-top:12px;">
+          <button class="ghost" id="loadMore">Загрузить больше</button>
         </div>
       </section>
 
-      <aside class="card" aria-labelledby="sidebar-title">
-        <h4 id="sidebar-title">Быстрая статистика</h4>
+      <aside class="card">
+        <h4>Быстрая статистика</h4>
         <div class="quick-stats" id="stats">
-          <div class="stat"><strong id="stat-count">5</strong><div style="font-size:.82rem">Вакансии</div></div>
-          <div class="stat"><strong id="stat-remote">2</strong><div style="font-size:.82rem">Из дома</div></div>
-          <div class="stat"><strong id="stat-types">5</strong><div style="font-size:.82rem">Типы</div></div>
+          <div class="stat"><strong id="stat-count">5</strong><div>Вакансии</div></div>
+          <div class="stat"><strong id="stat-remote">2</strong><div>Из дома</div></div>
+          <div class="stat"><strong id="stat-types">5</strong><div>Типы</div></div>
         </div>
-
         <hr style="border:none;height:1px;background:rgba(255,255,255,0.1);margin:12px 0">
-
         <div>
-          <h4 style="margin-bottom:6px;color:#ffffff">Советы для подростков 14-17 лет:</h4>
-          <ul style="margin:0;padding-left:18px;color:#ffffff;font-size:.95rem;opacity:0.9">
+          <h4>Советы для подростков:</h4>
+          <ul style="margin:0;padding-left:18px;opacity:0.9">
             <li>Соблюдайте субординацию!</li>
-            <li>Используйте простое электронное письмо и краткое резюме или описание навыков!</li>
-            <li>Если вы трудоустроены на одну вакансию, то можете быть устроены и на другую (за невыполненную работу - штраф от работодателя, можно оспорить)</li>
+            <li>Используйте простое резюме!</li>
+            <li>Заключайте договор!</li>
           </ul>
-        </div>
-
-        <hr style="border:none;height:1px;background:rgba(255,255,255,0.1);margin:12px 0">
-
-        <div>
-          <h4 style="margin-bottom:6px;color:#ffffff">Работодатель? Опубликуйте вакансию!</h4>
-          <p style="margin:0;color:#ffffff;opacity:0.9">Мы рекомендуем указать чёткие требования к возрасту (14-17 лет) и рабочему времени!</p>
         </div>
       </aside>
     </main>
 
     <footer>
-      <p style="margin:8px 0 0 0">Прототип для защиты в МГТУ имени Баумана. Для подростков 14-17 лет.</p>
+      <p>Прототип для защиты в МГТУ имени Баумана</p>
       <div class="footer-links">
         <a class="footer-link" data-page="about">О проекте</a>
         <a class="footer-link" data-page="rules">Правила</a>
@@ -614,20 +328,103 @@
     </footer>
   </div>
 
-  <!-- Контейнер для уведомлений -->
   <div class="notification-container" id="notificationContainer"></div>
 
-  <!-- Модальное окно моих заявок -->
+  <div class="modal-backdrop" id="loginModal">
+    <div class="modal">
+      <header>
+        <strong>Вход в профиль</strong>
+        <button class="ghost" id="closeLoginBtn">✕</button>
+      </header>
+      <form id="loginForm">
+        <input type="text" id="loginName" placeholder="Имя и фамилия" required value="Анна Петрова">
+        <input type="email" id="loginEmail" placeholder="Email" required value="anna@example.com">
+        <div style="display:flex;gap:10px;margin:5px 0">
+          <label><input type="radio" name="userType" value="seeker" id="userTypeSeeker" checked> Соискатель (14-17)</label>
+          <label><input type="radio" name="userType" value="employer" id="userTypeEmployer"> Работодатель (18+)</label>
+        </div>
+        <input type="number" id="loginAge" placeholder="Возраст" min="14" max="17" required value="16">
+        <div class="age-hint" id="ageHint">Для соискателя: от 14 до 17 лет</div>
+        <button type="submit" class="btn">Войти</button>
+        <div class="login-hint">Указывайте реальный возраст!</div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="profileEditModal">
+    <div class="modal">
+      <header>
+        <strong>👤 Редактирование профиля</strong>
+        <button class="ghost" id="closeProfileEditModal">✕</button>
+      </header>
+      <form id="profileEditForm">
+        <div class="form-group">
+          <label>Имя</label>
+          <input type="text" id="editProfileName" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="editProfileEmail" required>
+        </div>
+        <div class="form-group">
+          <label>Возраст</label>
+          <input type="number" id="editProfileAge" min="14" max="100" required>
+        </div>
+        <div class="form-group">
+          <label>О себе</label>
+          <textarea id="editProfileBio" rows="3" placeholder="Расскажите о себе..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Телефон</label>
+          <input type="tel" id="editProfilePhone" placeholder="+7 (999) 123-45-67">
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button type="button" class="ghost" id="cancelProfileEdit">Отмена</button>
+          <button type="submit" class="btn">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="chatModal">
+    <div class="modal">
+      <header>
+        <strong id="chatModalTitle">💬 Чаты</strong>
+        <button class="ghost" id="closeChatModal">✕</button>
+      </header>
+      <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;min-height:400px">
+        <div>
+          <input type="search" id="chatSearch" placeholder="Поиск чата..." style="width:100%;margin-bottom:12px">
+          <div class="chat-list" id="chatList"></div>
+        </div>
+        <div id="chatArea">
+          <div id="chatHeader" style="margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1)">
+            <strong id="currentChatName">Выберите чат</strong>
+          </div>
+          <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+              <div style="text-align:center;color:var(--muted);padding:40px">Выберите чат</div>
+            </div>
+            <div class="chat-input-container" id="chatInputContainer" style="display:none">
+              <input type="text" class="chat-input" id="chatInput" placeholder="Введите сообщение...">
+              <button class="btn" id="sendMessageBtn">Отправить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-backdrop" id="myApplicationsModal">
     <div class="modal">
       <header>
         <strong>📋 Мои заявки</strong>
-        <button class="ghost" id="closeMyApplicationsModal" style="padding:5px 10px;">✕</button>
+        <button class="ghost" id="closeMyApplicationsModal">✕</button>
       </header>
       <div id="myApplicationsContent">
-        <div style="text-align:center;padding:40px 20px;color:#ffffff;opacity:0.9">
+        <div id="emptyApplicationsState" style="text-align:center;padding:40px">
           <div style="font-size:48px;margin-bottom:20px">📭</div>
-          <h3 style="color:#ffffff;margin-bottom:12px">У вас пока нет заявок</h3>
+          <h3>У вас пока нет заявок</h3>
           <p>Откликнитесь на первую вакансию!</p>
         </div>
         <div id="applicationsList" style="display:none"></div>
@@ -638,64 +435,32 @@
     </div>
   </div>
 
-  <!-- Модальное окно разработки (главное меню) -->
   <div class="modal-backdrop" id="devModal">
-    <div class="modal" style="max-width: 600px;">
+    <div class="modal" style="max-width:600px">
       <header>
         <strong>⚙️ Меню разработки</strong>
-        <button class="ghost" id="closeDevModal" style="padding:5px 10px;">✕</button>
+        <button class="ghost" id="closeDevModal">✕</button>
       </header>
-      <div style="padding: 10px 0;">
-        <p style="color: var(--muted); margin-bottom: 15px;">Выберите функцию для просмотра деталей:</p>
-        <div class="features-grid">
-          <div class="feature-card" data-feature="profile">
-            <div class="feature-icon">👤</div>
-            <div class="feature-title">Редактирование профиля</div>
-            <div class="feature-desc">Настройка личных данных</div>
-            <div class="feature-badge">в разработке</div>
-          </div>
-          <div class="feature-card" data-feature="messages">
-            <div class="feature-icon">💬</div>
-            <div class="feature-title">Система сообщений</div>
-            <div class="feature-desc">Чат с работодателями</div>
-            <div class="feature-badge">в разработке</div>
-          </div>
-          <div class="feature-card" data-feature="notifications">
-            <div class="feature-icon">🔔</div>
-            <div class="feature-title">Настройки уведомлений</div>
-            <div class="feature-desc">Управление оповещениями</div>
-            <div class="feature-badge">в разработке</div>
-          </div>
-          <div class="feature-card" data-feature="stats">
-            <div class="feature-icon">📊</div>
-            <div class="feature-title">Расширенная статистика</div>
-            <div class="feature-desc">Аналитика и графики</div>
-            <div class="feature-badge">в разработке</div>
-          </div>
-          <div class="feature-card" data-feature="export">
-            <div class="feature-icon">📤</div>
-            <div class="feature-title">Экспорт данных</div>
-            <div class="feature-desc">Скачать свои заявки</div>
-            <div class="feature-badge">в разработке</div>
-          </div>
-          <div class="feature-card" data-feature="import">
-            <div class="feature-icon">📥</div>
-            <div class="feature-title">Импорт данных</div>
-            <div class="feature-desc">Загрузить резюме</div>
-            <div class="feature-badge">в разработке</div>
-          </div>
-          <div class="feature-card" data-feature="theme">
-            <div class="feature-icon">🎨</div>
-            <div class="feature-title">Настройки темы</div>
-            <div class="feature-desc">Оформление сайта</div>
-            <div class="feature-badge">в разработке</div>
-          </div>
-          <div class="feature-card" data-feature="backup">
-            <div class="feature-icon">💾</div>
-            <div class="feature-title">Резервное копирование</div>
-            <div class="feature-desc">Сохранение данных</div>
-            <div class="feature-badge">в разработке</div>
-          </div>
+      <div class="features-grid">
+        <div class="feature-card" data-feature="profile">
+          <div class="feature-icon">👤</div>
+          <div class="feature-title">Профиль</div>
+          <div class="feature-badge">в разработке</div>
+        </div>
+        <div class="feature-card" data-feature="messages">
+          <div class="feature-icon">💬</div>
+          <div class="feature-title">Сообщения</div>
+          <div class="feature-badge">готово</div>
+        </div>
+        <div class="feature-card" data-feature="notifications">
+          <div class="feature-icon">🔔</div>
+          <div class="feature-title">Уведомления</div>
+          <div class="feature-badge">в разработке</div>
+        </div>
+        <div class="feature-card" data-feature="stats">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Статистика</div>
+          <div class="feature-badge">в разработке</div>
         </div>
       </div>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
@@ -704,408 +469,166 @@
     </div>
   </div>
 
-  <!-- Модальные окна для каждой функции в разработке -->
-  <div class="modal-backdrop" id="featureProfileModal">
-    <div class="modal" style="max-width: 500px;">
+  <div class="modal-backdrop" id="jobFormModal">
+    <div class="modal">
       <header>
-        <strong>👤 Редактирование профиля</strong>
-        <button class="ghost close-feature-modal" data-modal="featureProfileModal" style="padding:5px 10px;">✕</button>
+        <strong id="jobFormTitle">Опубликовать вакансию</strong>
+        <button class="ghost" id="closeJobFormModal">✕</button>
       </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">👤</div>
-        <div class="feature-page-title">Редактирование профиля</div>
-        <div class="feature-page-desc">
-          Функция редактирования профиля находится в активной разработке. 
-          Скоро вы сможете изменять свои личные данные, загружать фото и настраивать приватность.
+      <form id="jobForm">
+        <input type="hidden" id="editingJobId">
+        <div class="form-group">
+          <label>Название *</label>
+          <input type="text" id="jobTitle" required>
         </div>
-        <div class="feature-progress">
-          <div class="feature-progress-bar" style="width: 45%;"></div>
+        <div class="form-group">
+          <label>Компания</label>
+          <input type="text" id="jobCompany">
         </div>
-        <div class="feature-status">
-          <span>⚙️ В разработке</span>
-          <span>45% готово</span>
+        <div class="form-group">
+          <label>Местоположение *</label>
+          <input type="text" id="jobLocation" required>
         </div>
-        <div class="feature-actions">
-          <button class="btn" onclick="showNotification('🔔', 'Уведомление', 'Мы сообщим вам, когда функция будет готова!')">🔔 Уведомить меня</button>
-          <button class="ghost close-feature-modal" data-modal="featureProfileModal">Закрыть</button>
+        <div class="form-group">
+          <label>Тип работы *</label>
+          <select id="jobType" required>
+            <option value="">Выберите</option>
+            <option value="разгрузка">Разгрузка</option>
+            <option value="расфасовщик">Расфасовщик</option>
+            <option value="помощник">Помощник</option>
+            <option value="тестировщик">Тестировщик</option>
+            <option value="ручная работа">Ручная работа</option>
+          </select>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="featureMessagesModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>💬 Система сообщений</strong>
-        <button class="ghost close-feature-modal" data-modal="featureMessagesModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">💬</div>
-        <div class="feature-page-title">Система сообщений</div>
-        <div class="feature-page-desc">
-          Внутренний чат для общения с работодателями находится в разработке. 
-          Вы сможете обсуждать детали вакансий, договариваться о собеседованиях и получать обратную связь.
+        <div class="form-group">
+          <label><input type="checkbox" id="jobRemote"> Удаленная работа</label>
         </div>
-        <div class="feature-progress">
-          <div class="feature-progress-bar" style="width: 25%;"></div>
+        <div class="form-group">
+          <label>Часов в неделю</label>
+          <input type="number" id="jobHours" min="0" max="40" value="10">
         </div>
-        <div class="feature-status">
-          <span>⚙️ В разработке</span>
-          <span>25% готово</span>
+        <div class="form-group">
+          <label>Мин. возраст *</label>
+          <input type="number" id="jobMinAge" min="14" max="17" value="14" required>
         </div>
-        <div class="feature-actions">
-          <button class="btn" onclick="showNotification('🔔', 'Уведомление', 'Мы сообщим вам о запуске чата!')">🔔 Уведомить меня</button>
-          <button class="ghost close-feature-modal" data-modal="featureMessagesModal">Закрыть</button>
+        <div class="form-group">
+          <label>Описание *</label>
+          <textarea id="jobDescription" rows="4" required></textarea>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="featureNotificationsModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>🔔 Настройки уведомлений</strong>
-        <button class="ghost close-feature-modal" data-modal="featureNotificationsModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">🔔</div>
-        <div class="feature-page-title">Настройки уведомлений</div>
-        <div class="feature-page-desc">
-          Управляйте тем, какие уведомления вы хотите получать: новые вакансии, ответы работодателей, 
-          напоминания и многое другое. Функция в разработке.
+        <div class="form-group">
+          <label>Теги</label>
+          <input type="text" id="jobTagsInput" placeholder="Введите тег и нажмите Enter">
+          <div class="tags-input-container" id="tagsContainer"></div>
         </div>
-        <div class="feature-progress">
-          <div class="feature-progress-bar" style="width: 15%;"></div>
+        <div class="form-group">
+          <label>Оплата</label>
+          <input type="text" id="jobSalary">
         </div>
-        <div class="feature-status">
-          <span>⚙️ В разработке</span>
-          <span>15% готово</span>
-        </div>
-        <div class="feature-actions">
-          <button class="btn" onclick="showNotification('🔔', 'Уведомление', 'Скоро вы сможете настроить уведомления!')">🔔 Уведомить меня</button>
-          <button class="ghost close-feature-modal" data-modal="featureNotificationsModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="featureStatsModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>📊 Расширенная статистика</strong>
-        <button class="ghost close-feature-modal" data-modal="featureStatsModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">📊</div>
-        <div class="feature-page-title">Расширенная статистика</div>
-        <div class="feature-page-desc">
-          Подробная аналитика ваших откликов, просмотров и успешных трудоустройств. 
-          Графики, диаграммы и полезные метрики для эффективного поиска работы.
-        </div>
-        <div class="feature-progress">
-          <div class="feature-progress-bar" style="width: 10%;"></div>
-        </div>
-        <div class="feature-status">
-          <span>⚙️ В разработке</span>
-          <span>10% готово</span>
-        </div>
-        <div class="feature-actions">
-          <button class="btn" onclick="showNotification('🔔', 'Уведомление', 'Статистика скоро появится!')">🔔 Уведомить меня</button>
-          <button class="ghost close-feature-modal" data-modal="featureStatsModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="featureExportModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>📤 Экспорт данных</strong>
-        <button class="ghost close-feature-modal" data-modal="featureExportModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">📤</div>
-        <div class="feature-page-title">Экспорт данных</div>
-        <div class="feature-page-desc">
-          Скачивайте свои заявки, резюме и историю откликов в различных форматах: 
-          PDF, Excel, JSON. Удобно для архивации и печати.
-        </div>
-        <div class="feature-progress">
-          <div class="feature-progress-bar" style="width: 20%;"></div>
-        </div>
-        <div class="feature-status">
-          <span>⚙️ В разработке</span>
-          <span>20% готово</span>
-        </div>
-        <div class="feature-actions">
-          <button class="btn" onclick="showNotification('🔔', 'Уведомление', 'Экспорт данных будет доступен скоро!')">🔔 Уведомить меня</button>
-          <button class="ghost close-feature-modal" data-modal="featureExportModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="featureImportModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>📥 Импорт данных</strong>
-        <button class="ghost close-feature-modal" data-modal="featureImportModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">📥</div>
-        <div class="feature-page-title">Импорт данных</div>
-        <div class="feature-page-desc">
-          Загружайте готовые резюме в форматах PDF, DOCX или создавайте их прямо на сайте 
-          с помощью удобного конструктора.
-        </div>
-        <div class="feature-progress">
-          <div class="feature-progress-bar" style="width: 30%;"></div>
-        </div>
-        <div class="feature-status">
-          <span>⚙️ В разработке</span>
-          <span>30% готово</span>
-        </div>
-        <div class="feature-actions">
-          <button class="btn" onclick="showNotification('🔔', 'Уведомление', 'Импорт резюме скоро заработает!')">🔔 Уведомить меня</button>
-          <button class="ghost close-feature-modal" data-modal="featureImportModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="featureThemeModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>🎨 Настройки темы</strong>
-        <button class="ghost close-feature-modal" data-modal="featureThemeModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">🎨</div>
-        <div class="feature-page-title">Настройки темы</div>
-        <div class="feature-page-desc">
-          Выбирайте цветовое оформление сайта под свой вкус: темная тема, светлая, 
-          цветные акценты и многое другое. Индивидуальный стиль для каждого!
-        </div>
-        <div class="feature-progress">
-          <div class="feature-progress-bar" style="width: 50%;"></div>
-        </div>
-        <div class="feature-status">
-          <span>⚙️ В разработке</span>
-          <span>50% готово</span>
-        </div>
-        <div class="feature-actions">
-          <button class="btn" onclick="showNotification('🔔', 'Уведомление', 'Скоро вы сможете менять тему!')">🔔 Уведомить меня</button>
-          <button class="ghost close-feature-modal" data-modal="featureThemeModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="featureBackupModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>💾 Резервное копирование</strong>
-        <button class="ghost close-feature-modal" data-modal="featureBackupModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">💾</div>
-        <div class="feature-page-title">Резервное копирование</div>
-        <div class="feature-page-desc">
-          Автоматическое сохранение ваших данных, возможность восстановления 
-          в случае потери информации. Ваши данные в безопасности!
-        </div>
-        <div class="feature-progress">
-          <div class="feature-progress-bar" style="width: 35%;"></div>
-        </div>
-        <div class="feature-status">
-          <span>⚙️ В разработке</span>
-          <span>35% готово</span>
-        </div>
-        <div class="feature-actions">
-          <button class="btn" onclick="showNotification('🔔', 'Уведомление', 'Бэкапы скоро появятся!')">🔔 Уведомить меня</button>
-          <button class="ghost close-feature-modal" data-modal="featureBackupModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Модальные окна для футера -->
-  <div class="modal-backdrop" id="aboutModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>ℹ️ О проекте</strong>
-        <button class="ghost close-footer-modal" data-modal="aboutModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">ℹ️</div>
-        <div class="feature-page-title">Teen Hustle</div>
-        <div class="feature-page-desc">
-          Платформа для поиска работы подростками 14-17 лет. Мы помогаем молодым людям 
-          найти первую работу, получить ценный опыт и заработать первые деньги.
-        </div>
-        <div style="text-align: left; margin-top: 20px;">
-          <p><strong>Наша миссия:</strong> Сделать процесс трудоустройства подростков простым, безопасным и эффективным.</p>
-          <p><strong>Для кого:</strong> Подростки 14-17 лет, работодатели, готовые работать с молодежью.</p>
-          <p><strong>Преимущества:</strong> Проверенные вакансии, защита прав, поддержка 24/7.</p>
-        </div>
-        <div class="feature-actions" style="margin-top: 20px;">
-          <button class="ghost close-footer-modal" data-modal="aboutModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="rulesModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>📜 Правила</strong>
-        <button class="ghost close-footer-modal" data-modal="rulesModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">📜</div>
-        <div class="feature-page-title">Правила платформы</div>
-        <div style="text-align: left; margin-top: 20px;">
-          <ol style="padding-left: 20px; color: var(--muted);">
-            <li style="margin-bottom: 10px;">Указывайте только настоящий возраст. За фальсификацию - блокировка!</li>
-            <li style="margin-bottom: 10px;">Соблюдайте субординацию и уважайте других пользователей.</li>
-            <li style="margin-bottom: 10px;">Не передавайте личные данные третьим лицам.</li>
-            <li style="margin-bottom: 10px;">При трудоустройстве обязательно заключайте договор.</li>
-            <li style="margin-bottom: 10px;">В случае конфликтов обращайтесь в поддержку.</li>
-          </ol>
-        </div>
-        <div class="feature-actions" style="margin-top: 20px;">
-          <button class="ghost close-footer-modal" data-modal="rulesModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="helpModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>❓ Помощь</strong>
-        <button class="ghost close-footer-modal" data-modal="helpModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">❓</div>
-        <div class="feature-page-title">Центр помощи</div>
-        <div style="text-align: left; margin-top: 20px;">
-          <p><strong>Часто задаваемые вопросы:</strong></p>
-          <ul style="list-style: none; padding: 0;">
-            <li style="margin-bottom: 10px;">❓ <strong>Как откликнуться на вакансию?</strong> Нажмите кнопку "Откликнуться" на карточке вакансии и заполните форму.</li>
-            <li style="margin-bottom: 10px;">❓ <strong>Как сохранить вакансию?</strong> Нажмите сердечко на карточке вакансии.</li>
-            <li style="margin-bottom: 10px;">❓ <strong>Безопасно ли это?</strong> Да, мы проверяем всех работодателей.</li>
-            <li style="margin-bottom: 10px;">❓ <strong>Сколько стоит?</strong> Платформа полностью бесплатна для соискателей.</li>
-          </ul>
-          <p style="margin-top: 20px;"><strong>Служба поддержки:</strong> support@teenhustle.ru</p>
-        </div>
-        <div class="feature-actions" style="margin-top: 20px;">
-          <button class="ghost close-footer-modal" data-modal="helpModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="contactModal">
-    <div class="modal" style="max-width: 500px;">
-      <header>
-        <strong>📞 Контакты</strong>
-        <button class="ghost close-footer-modal" data-modal="contactModal" style="padding:5px 10px;">✕</button>
-      </header>
-      <div class="feature-page">
-        <div class="feature-page-icon">📞</div>
-        <div class="feature-page-title">Свяжитесь с нами</div>
-        <div style="text-align: left; margin-top: 20px;">
-          <p><strong>Email:</strong> info@teenhustle.ru</p>
-          <p><strong>Телефон:</strong> +7 (999) 123-45-67</p>
-          <p><strong>Адрес:</strong> г. Москва, ул. Баумана, д. 5</p>
-          <p><strong>Время работы:</strong> Пн-Пт 9:00 - 18:00</p>
-        </div>
-        <div class="feature-actions" style="margin-top: 20px;">
-          <button class="btn" onclick="showNotification('📧', 'Письмо отправлено', 'Мы ответим вам в ближайшее время!')">✉️ Написать нам</button>
-          <button class="ghost close-footer-modal" data-modal="contactModal">Закрыть</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal" role="document">
-      <header>
-        <strong id="modalTitle">Откликнуться на вакансию</strong>
-        <button id="closeModal" class="ghost" aria-label="Закрыть">✕</button>
-      </header>
-
-      <form id="applyForm" novalidate>
-        <input type="hidden" id="jobId" />
-        
-        <div>
-          <label for="appName">ФИО</label>
-          <input id="appName" type="text" required placeholder="Фамилия Имя Отчество" />
-        </div>
-        
-        <div>
-          <label for="appAge">Ваш возраст</label>
-          <input id="appAge" type="number" required min="14" max="17" placeholder="14" title="Введите возраст от 14 до 17 лет" />
-        </div>
-        
-        <div>
-          <label for="appEmail">Email</label>
-            <input id="appEmail" type="email" required placeholder="тинэйджерпочта@mail.ru" />
-        </div>
-        
-        <label for="appSkills">Ваши навыки и умения</label>
-        <textarea id="appSkills" placeholder="Перечислите ваши навыки через запятую..." required></textarea>
-        
-        <label for="appMotivation">Почему вы хотите работать именно у нас?</label>
-        <textarea id="appMotivation" placeholder="Расскажите о вашей мотивации..." rows="3"></textarea>
-        
-        <div>
-          <input type="checkbox" id="appGuardian" name="appGuardian" required>
-          <label for="appGuardian">Подтверждаю, что имею согласие родителей/опекунов на трудоустройство</label>
-        </div>
-        
-        <div>
-          <input type="checkbox" id="appSchedule" name="appSchedule" required>
-          <label for="appSchedule">Готов(а) соблюдать рабочий график и согласовывать изменения с работодателем</label>
-        </div>
-        
-        <div>
-          <input type="checkbox" id="appDocuments" name="appDocuments" required>
-          <label for="appDocuments">Имею все необходимые документы (паспорт, СНИЛС, ИНН, мед.справка)</label>
-        </div>
-        
-        <label for="appNote">Дополнительная информация (если есть резюме, желательно прикрепить через "Google Docs")</label>
-        <textarea id="appNote" placeholder="Дополнительные сведения о себе, ссылка на резюме..." rows="2"></textarea>
-        
-        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
-          <button type="button" class="ghost" id="cancelApply">Закрыть</button>
-          <button type="submit" class="btn">Отправить заявку</button>
+        <div style="display:flex;gap:8px;justify-content:space-between;margin-top:15px">
+          <button type="button" class="danger-btn" id="deleteJobBtn" style="display:none">🗑️ Удалить</button>
+          <div style="display:flex;gap:8px;margin-left:auto;">
+            <button type="button" class="ghost" id="cancelJobForm">Отмена</button>
+            <button type="submit" class="btn" id="submitJobBtn">Опубликовать</button>
+          </div>
         </div>
       </form>
     </div>
   </div>
 
-  <div class="modal-backdrop" id="employerModal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal" role="document">
+  <div class="modal-backdrop" id="modal">
+    <div class="modal">
       <header>
-        <strong id="employerModalTitle">Отклики на вакансию</strong>
-        <button id="closeEmployerModal" class="ghost" aria-label="Закрыть">✕</button>
+        <strong id="modalTitle">Откликнуться</strong>
+        <button id="closeModal" class="ghost">✕</button>
       </header>
-
-      <div id="employerModalContent">
-        <div style="text-align:center;padding:40px 20px;color:#ffffff;opacity:0.9">
-          <div style="font-size:48px;margin-bottom:20px">📋</div>
-          <h3 style="color:#ffffff;margin-bottom:12px">Отклики на вакансию</h3>
-          <p>Тут будут появляться кандидаты, которые хотят устроиться к вам!</p>
-          <p style="font-size:0.9rem;margin-top:20px">Пока здесь пусто, но скоро появятся первые соискатели</p>
+      <form id="applyForm">
+        <input type="hidden" id="jobId">
+        <div><label>ФИО</label><input id="appName" type="text" required></div>
+        <div><label>Возраст</label><input id="appAge" type="number" min="14" max="17" required></div>
+        <div><label>Email</label><input id="appEmail" type="email" required></div>
+        <label>Навыки</label><textarea id="appSkills" required></textarea>
+        <label>Мотивация</label><textarea id="appMotivation" rows="3"></textarea>
+        <div><input type="checkbox" id="appGuardian" required> <label>Согласие родителей</label></div>
+        <div><input type="checkbox" id="appSchedule" required> <label>Готов соблюдать график</label></div>
+        <div><input type="checkbox" id="appDocuments" required> <label>Есть документы</label></div>
+        <label>Доп. информация</label><textarea id="appNote" rows="2"></textarea>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button type="button" class="ghost" id="cancelApply">Закрыть</button>
+          <button type="submit" class="btn">Отправить</button>
         </div>
-        
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="employerModal">
+    <div class="modal">
+      <header>
+        <strong id="employerModalTitle">Отклики</strong>
+        <button id="closeEmployerModal" class="ghost">✕</button>
+      </header>
+      <div id="employerModalContent">
+        <div id="emptyCandidatesState" style="text-align:center;padding:40px">
+          <div style="font-size:48px;margin-bottom:20px">📋</div>
+          <h3>Отклики на вакансию</h3>
+          <p>Здесь будут кандидаты</p>
+        </div>
         <div id="candidatesList" style="display:none"></div>
       </div>
-      
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
         <button type="button" class="ghost" id="cancelEmployerModal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="aboutModal">
+    <div class="modal">
+      <header><strong>О проекте</strong><button class="ghost close-footer-modal" data-modal="aboutModal">✕</button></header>
+      <div class="feature-page">
+        <div class="feature-page-icon">ℹ️</div>
+        <div class="feature-page-title">Teen Hustle</div>
+        <div class="feature-page-desc">Платформа для поиска работы подростками 14-17 лет</div>
+        <button class="ghost close-footer-modal" data-modal="aboutModal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="rulesModal">
+    <div class="modal">
+      <header><strong>Правила</strong><button class="ghost close-footer-modal" data-modal="rulesModal">✕</button></header>
+      <div class="feature-page">
+        <div class="feature-page-icon">📜</div>
+        <div class="feature-page-title">Правила платформы</div>
+        <ol style="text-align:left">
+          <li>Указывайте настоящий возраст</li>
+          <li>Соблюдайте субординацию</li>
+          <li>Заключайте договор</li>
+        </ol>
+        <button class="ghost close-footer-modal" data-modal="rulesModal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="helpModal">
+    <div class="modal">
+      <header><strong>Помощь</strong><button class="ghost close-footer-modal" data-modal="helpModal">✕</button></header>
+      <div class="feature-page">
+        <div class="feature-page-icon">❓</div>
+        <div class="feature-page-title">Центр помощи</div>
+        <p>support@teenhustle.ru</p>
+        <button class="ghost close-footer-modal" data-modal="helpModal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="contactModal">
+    <div class="modal">
+      <header><strong>Контакты</strong><button class="ghost close-footer-modal" data-modal="contactModal">✕</button></header>
+      <div class="feature-page">
+        <div class="feature-page-icon">📞</div>
+        <div class="feature-page-title">Свяжитесь с нами</div>
+        <p>info@teenhustle.ru</p>
+        <p>+7 (999) 123-45-67</p>
+        <button class="ghost close-footer-modal" data-modal="contactModal">Закрыть</button>
       </div>
     </div>
   </div>
@@ -1113,471 +636,48 @@
   <script>
     let currentUser = null;
     let isEmployerMode = false;
-    
-    document.addEventListener('DOMContentLoaded', function() {
-      const savedUser = localStorage.getItem('currentUser');
-      if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        isEmployerMode = currentUser.mode === 'employer';
-        updateProfileUI();
-        showNotification('🔄', 'Сессия восстановлена', 'Добро пожаловать обратно, ' + currentUser.name + '!');
-      } else {
-        document.getElementById('loginModal').style.display = 'flex';
-      }
+    let visibleJobs = [];
+    let pageSize = 4;
+    let page = 0;
+    let isShowingFavorites = false;
+    let currentJobTags = [];
+    let currentChatId = null;
+    let chats = [];
+    let messages = [];
 
-      initProfileDropdown();
-      clearFavoritesOnFirstLoad();
-      initializeUserMode();
-      
-      document.getElementById('userTypeSeeker').addEventListener('change', updateAgeField);
-      document.getElementById('userTypeEmployer').addEventListener('change', updateAgeField);
-      
-      initDevMenu();
-      
-      initFooterLinks();
-      
-      initMyApplicationsModal();
-      
-      setTimeout(() => {
-        showNotification('👋', 'Добро пожаловать!', 'Рады видеть вас на Teen Hustle');
-      }, 1000);
-    });
+    const LS_FAVS = 'teen_hustle_favorites_v1';
+    const LS_APPLICATIONS = 'teen_hustle_applications';
+    const LS_JOBS = 'teen_hustle_jobs';
+    const LS_CHATS = 'teen_hustle_chats';
+    const LS_MESSAGES = 'teen_hustle_messages';
 
-    window.showNotification = function(icon, title, message, duration = 5000) {
+    let jobsData = [
+      {id:'j1',title:'Выгрузка фуры',company:'Магнит',location:'ул. Братиславская, 14',type:'разгрузка',remote:false,hoursPerWeek:20,МинимальныйВозраст:14,description:'Выгружаете фуру',tags:['Физическая работа'],employerId:null,salary:'от 1000 руб/смена',createdAt:Date.now() - 86400000},
+      {id:'j2',title:'Упаковщик',company:'Мармеладыч',location:'ул. Матросова, 134',type:'расфасовщик',remote:false,hoursPerWeek:15,МинимальныйВозраст:16,description:'Расфасовка товара',tags:['Внимательность'],employerId:null,salary:'12000 руб/мес',createdAt:Date.now() - 172800000},
+      {id:'j3',title:'Выгульщик собак',company:'Частное лицо',location:'Выезд на адрес',type:'помощник',remote:false,hoursPerWeek:10,МинимальныйВозраст:14,description:'Выгул собак',tags:['Животные'],employerId:null,salary:'от 300 руб/час',createdAt:Date.now() - 259200000},
+      {id:'j4',title:'Рукоделие',company:'HandMade',location:'Ваш дом',type:'ручная работа',remote:true,hoursPerWeek:0,МинимальныйВозраст:16,description:'Продажа изделий',tags:['Творчество'],employerId:null,salary:'договорная',createdAt:Date.now() - 345600000},
+      {id:'j5',title:'Тестировщик',company:'Valve',location:'Ваш дом',type:'тестировщик',remote:true,hoursPerWeek:10,МинимальныйВозраст:14,description:'Тестирование ПО',tags:['IT'],employerId:null,salary:'15000 руб/мес',createdAt:Date.now() - 432000000}
+    ];
+
+    function showNotification(icon, title, message, duration = 5000) {
       const container = document.getElementById('notificationContainer');
       const notification = document.createElement('div');
       notification.className = 'notification';
       notification.innerHTML = `
         <div class="notification-icon">${icon}</div>
         <div class="notification-content">
-          <div class="notification-title">${title}</div>
-          <div class="notification-message">${message}</div>
+          <div class="notification-title">${escapeHtml(title)}</div>
+          <div class="notification-message">${escapeHtml(message)}</div>
         </div>
-        <button class="notification-close" onclick="this.parentElement.classList.add('fade-out'); setTimeout(() => this.parentElement.remove(), 300);">&times;</button>
+        <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
       `;
-      
       container.appendChild(notification);
-      
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.classList.add('fade-out');
-          setTimeout(() => notification.remove(), 300);
-        }
-      }, duration);
+      setTimeout(() => notification.remove(), duration);
     }
 
-    function initDevMenu() {
-      const devBtn = document.getElementById('dev-menu-btn');
-      const devModal = document.getElementById('devModal');
-      const closeDevModal = document.getElementById('closeDevModal');
-      const cancelDevModal = document.getElementById('cancelDevModal');
-      
-      if (devBtn) {
-        devBtn.addEventListener('click', () => {
-          devModal.style.display = 'flex';
-        });
-      }
-      
-      if (closeDevModal) {
-        closeDevModal.addEventListener('click', () => {
-          devModal.style.display = 'none';
-        });
-      }
-      
-      if (cancelDevModal) {
-        cancelDevModal.addEventListener('click', () => {
-          devModal.style.display = 'none';
-        });
-      }
-      
-      document.querySelectorAll('.feature-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-          const feature = e.currentTarget.dataset.feature;
-          const modalId = `feature${feature.charAt(0).toUpperCase() + feature.slice(1)}Modal`;
-          const modal = document.getElementById(modalId);
-          
-          if (modal) {
-            devModal.style.display = 'none';
-            modal.style.display = 'flex';
-          }
-        });
-      });
-      
-      document.querySelectorAll('.close-feature-modal').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const modalId = e.currentTarget.dataset.modal;
-          const modal = document.getElementById(modalId);
-          if (modal) {
-            modal.style.display = 'none';
-          }
-        });
-      });
-    }
-
-    function initMyApplicationsModal() {
-      const myApplicationsModal = document.getElementById('myApplicationsModal');
-      const closeBtn = document.getElementById('closeMyApplicationsModal');
-      const cancelBtn = document.getElementById('cancelMyApplicationsModal');
-      
-      if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-          myApplicationsModal.style.display = 'none';
-        });
-      }
-      
-      if (cancelBtn) {
-        cancelBtn.addEventListener('click', () => {
-          myApplicationsModal.style.display = 'none';
-        });
-      }
-    }
-
-    function showMyApplications() {
-      if (!currentUser) {
-        showNotification('⚠️', 'Требуется вход', 'Пожалуйста, войдите в профиль');
-        document.getElementById('loginModal').style.display = 'flex';
-        return;
-      }
-      
-      const applications = loadApplications();
-      const userEmail = currentUser.email;
-      const userApplications = applications.filter(app => app.email === userEmail);
-      
-      const emptyState = document.querySelector('#myApplicationsContent > div[style*="text-align:center"]');
-      const applicationsList = document.getElementById('applicationsList');
-      
-      if (userApplications.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
-        if (applicationsList) applicationsList.style.display = 'none';
-      } else {
-        if (emptyState) emptyState.style.display = 'none';
-        if (applicationsList) {
-          applicationsList.style.display = 'block';
-          applicationsList.innerHTML = '';
-          
-          userApplications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-          
-          userApplications.forEach(app => {
-            const job = jobsData.find(j => j.id === app.jobId) || { title: 'Неизвестная вакансия', company: 'Неизвестная компания' };
-            const date = new Date(app.timestamp).toLocaleString('ru-RU', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            });
-            
-            const appElement = document.createElement('div');
-            appElement.className = 'application-item';
-            appElement.innerHTML = `
-              <div class="application-header">
-                <span class="application-title">${escapeHtml(job.title)}</span>
-                <span class="application-date">${date}</span>
-              </div>
-              <div class="application-company">${escapeHtml(job.company || 'Компания не указана')}</div>
-              <div class="application-skills">
-                <strong>Навыки:</strong> ${escapeHtml(app.skills)}
-              </div>
-              ${app.motivation ? `<div style="margin: 8px 0; color: var(--muted);"><strong>Мотивация:</strong> ${escapeHtml(app.motivation)}</div>` : ''}
-              <div class="application-status">✓ Заявка отправлена</div>
-            `;
-            
-            applicationsList.appendChild(appElement);
-          });
-        }
-      }
-      
-      document.getElementById('myApplicationsModal').style.display = 'flex';
-    }
-
-    function initFooterLinks() {
-      document.querySelectorAll('.footer-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const page = e.target.dataset.page;
-          const modalId = page + 'Modal';
-          const modal = document.getElementById(modalId);
-          
-          if (modal) {
-            modal.style.display = 'flex';
-          }
-        });
-      });
-      
-      document.querySelectorAll('.close-footer-modal').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const modalId = e.currentTarget.dataset.modal;
-          const modal = document.getElementById(modalId);
-          if (modal) {
-            modal.style.display = 'none';
-          }
-        });
-      });
-    }
-
-    function updateAgeField() {
-      const ageInput = document.getElementById('loginAge');
-      const ageHint = document.getElementById('ageHint');
-      
-      if (document.getElementById('userTypeSeeker').checked) {
-        ageInput.min = 14;
-        ageInput.max = 17;
-        ageInput.placeholder = "14-17";
-        ageInput.value = 16;
-        ageHint.textContent = "Для соискателя: от 14 до 17 лет";
-      } else {
-        ageInput.min = 18;
-        ageInput.max = 100;
-        ageInput.placeholder = "18+";
-        ageInput.value = 35;
-        ageHint.textContent = "Для работодателя: от 18 лет";
-      }
-    }
-
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const name = document.getElementById('loginName').value;
-      const email = document.getElementById('loginEmail').value;
-      const age = parseInt(document.getElementById('loginAge').value);
-      const mode = document.querySelector('input[name="userType"]:checked').value;
-      
-      if (mode === 'seeker' && (age < 14 || age > 17)) {
-        showNotification('❌', 'Ошибка', 'Для соискателя возраст должен быть от 14 до 17 лет');
-        return;
-      }
-      if (mode === 'employer' && (age < 18 || age > 100)) {
-        showNotification('❌', 'Ошибка', 'Для работодателя возраст должен быть от 18 лет');
-        return;
-      }
-      
-      currentUser = { name, email, age, mode };
-      isEmployerMode = mode === 'employer';
-      
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      document.getElementById('loginModal').style.display = 'none';
-      
-      updateProfileUI();
-      updateModeFromUser();
-      
-      showNotification('✅', 'Успешно!', `Добро пожаловать, ${name}!`);
-    });
-
-    document.getElementById('closeLoginBtn').addEventListener('click', function() {
-      document.getElementById('loginModal').style.display = 'none';
-      showNotification('👋', 'До встречи!', 'Войдите в профиль, чтобы продолжить');
-    });
-
-    function updateProfileUI() {
-      if (currentUser) {
-        document.getElementById('profileInfo').style.display = 'flex';
-        document.getElementById('profileName').textContent = currentUser.name;
-        document.getElementById('profileAge').textContent = currentUser.age + ' лет';
-        document.getElementById('avatarText').textContent = currentUser.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() || '👤';
-        
-        updateDropdownContent();
-      }
-    }
-
-    function updateDropdownContent() {
-      const dropdownContent = document.getElementById('profileDropdownContent');
-      dropdownContent.innerHTML = `
-        <div class="dropdown-header">
-          <strong>${escapeHtml(currentUser.name)}</strong>
-          <div style="font-size:0.8rem;margin-top:4px">${escapeHtml(currentUser.email)}</div>
-          <div style="font-size:0.8rem;margin-top:2px;color:var(--accent)">${currentUser.age} лет</div>
-        </div>
-        
-        <div class="mode-switcher">
-          <span class="mode-label">Соискатель</span>
-          <label class="switch">
-            <input type="checkbox" id="modeToggle" ${isEmployerMode ? 'checked' : ''}>
-            <span class="slider"></span>
-          </label>
-          <span class="mode-label">Работодатель</span>
-        </div>
-        
-        <div class="dropdown-item" id="mode-display">${isEmployerMode ? '👔 Режим: Работодатель' : '👤 Режим: Соискатель'}</div>
-        <div class="dropdown-divider"></div>
-        <div class="dropdown-item" id="settings-btn">⚙️ Настройки</div>
-        <div class="dropdown-item" id="help-btn">❓ Помощь</div>
-        <div class="dropdown-divider"></div>
-        <div class="dropdown-item" id="logoutBtn">🚪 Выйти</div>
-      `;
-
-      document.getElementById('modeToggle').addEventListener('change', function(e) {
-        isEmployerMode = e.target.checked;
-        currentUser.mode = isEmployerMode ? 'employer' : 'seeker';
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        
-        document.getElementById('mode-display').innerHTML = isEmployerMode ? '👔 Режим: Работодатель' : '👤 Режим: Соискатель';
-        
-        updateActionButton();
-        updateFavsButton();
-        renderJobs(visibleJobs, true);
-        
-        showNotification('🔄', 'Режим изменён', isEmployerMode ? 'Теперь вы работодатель' : 'Теперь вы соискатель');
-      });
-
-      document.getElementById('settings-btn').addEventListener('click', function() {
-        document.getElementById('devModal').style.display = 'flex';
-      });
-
-      document.getElementById('help-btn').addEventListener('click', function() {
-        document.getElementById('helpModal').style.display = 'flex';
-      });
-
-      document.getElementById('logoutBtn').addEventListener('click', function() {
-        localStorage.removeItem('currentUser');
-        currentUser = null;
-        document.getElementById('profileInfo').style.display = 'none';
-        document.getElementById('avatarText').textContent = '👤';
-        document.getElementById('loginModal').style.display = 'flex';
-        showNotification('👋', 'Вы вышли', 'До скорой встречи!');
-      });
-    }
-
-    function updateModeFromUser() {
-      if (currentUser) {
-        isEmployerMode = currentUser.mode === 'employer';
-        const modeToggle = document.getElementById('modeToggle');
-        if (modeToggle) {
-          modeToggle.checked = isEmployerMode;
-        }
-        const modeDisplay = document.getElementById('mode-display');
-        if (modeDisplay) {
-          modeDisplay.innerHTML = isEmployerMode ? '👔 Режим: Работодатель' : '👤 Режим: Соискатель';
-        }
-        updateActionButton();
-        updateFavsButton();
-      }
-    }
-
-    const jobsData = [
-      {id:'j1',title:'Выгрузка фуры',company:'Магнит',location:'ул. Братиславская, 14, Москва',type:'разгрузка',remote:false,hoursPerWeek:20,МинимальныйВозраст:14,description:'Выгружаете фуру - получаете деньги за смену',tags:['Физическая работа','Оплата за выполненную работу']},
-      {id:'j2',title:'Упаковщик-комплектовщик',company:'Мармеладыч',location:'ул. Матросова, 134, Тольятти',type:'расфасовщик',remote:false,hoursPerWeek:15,МинимальныйВозраст:16,description:'Расфасовываете товар по выданному примеру',tags:['Внимательность','Монотонная работа']},
-      {id:'j3',title:'Выгульщик Собак и/или Няня для домашних животных',location:'Выезд на адрес',type:'помощник',remote:false,hoursPerWeek:10,МинимальныйВозраст:14,description:'Выгуливаешь собак/сидишь с домашними животными и получаешь оплату в конце недели',tags:['Животные','Няня для животных','Договорные часы работы']},
-      {id:'j4',title:'Рукоделие и продажа изделий',location:'Ваш дом',type:'ручная работа',remote:true,hoursPerWeek:0,МинимальныйВозраст:16,description:'Продаешь изделия на заказ и получаешь деньги в конце дня',tags:['Работа на заказ','Удаленная работа','Отправка результата почтой']},
-      {id:'j5',title:'Тестировщик приложений',company:'Valve',location:'Ваш дом',type:'тестировщик',remote:true,hoursPerWeek:10,МинимальныйВозраст:14,description:'Тестируете приложение. Ищите наличие багов/недочетов/ошибок и сообщаете о них работодателю',tags:['Тестировщик','Удаленная работа','Активное общение с работодателем']}
-    ];
-
-    let visibleJobs = [];
-    let pageSize = 4;
-    let page = 0;
-    let isShowingFavorites = false;
-    let currentJobIdForApplications = null;
-
-    const $jobs = document.getElementById('jobs');
-    const $q = document.getElementById('q');
-    const $type = document.getElementById('type');
-    const $location = document.getElementById('location');
-    const $age = document.getElementById('age');
-    const $maxHours = document.getElementById('maxHours');
-    const $searchBtn = document.getElementById('searchBtn');
-    const $clear = document.getElementById('clear');
-    const $loadMore = document.getElementById('loadMore');
-    const $statCount = document.getElementById('stat-count');
-    const $statRemote = document.getElementById('stat-remote');
-    const $statTypes = document.getElementById('stat-types');
-    const $favCount = document.getElementById('fav-count');
-    const $showFavs = document.getElementById('show-favs');
-    const $actionButton = document.getElementById('action-button');
-    const $modeToggle = document.getElementById('modeToggle');
-    const $modeDisplay = document.getElementById('mode-display');
-
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modalTitle');
-    const jobIdField = document.getElementById('jobId');
-
-    const employerModal = document.getElementById('employerModal');
-    const employerModalTitle = document.getElementById('employerModalTitle');
-    const candidatesList = document.getElementById('candidatesList');
-
-    const LS_FAVS = 'teen_hustle_favorites_v1';
-    const LS_FIRST_LOAD = 'teen_hustle_first_load';
-    const LS_USER_MODE = 'teen_hustle_user_mode';
-    const LS_APPLICATIONS = 'teen_hustle_applications';
-
-    function initProfileDropdown() {
-      const profileToggle = document.getElementById('profileToggle');
-      const profileDropdown = document.getElementById('profileDropdown');
-      if (profileToggle && profileDropdown) {
-        profileToggle.addEventListener('click', function(e) {
-          e.stopPropagation();
-          profileDropdown.classList.toggle('show');
-        });
-        document.addEventListener('click', function() {
-          profileDropdown.classList.remove('show');
-        });
-        profileDropdown.addEventListener('click', function(e) {
-          e.stopPropagation();
-        });
-      }
-    }
-
-    function clearFavoritesOnFirstLoad() {
-      const firstLoad = localStorage.getItem(LS_FIRST_LOAD);
-      if (!firstLoad) {
-        localStorage.setItem(LS_FAVS, JSON.stringify([]));
-        localStorage.setItem(LS_FIRST_LOAD, 'true');
-      }
-    }
-
-    function initializeUserMode() {
-      const savedMode = localStorage.getItem(LS_USER_MODE);
-      if (savedMode === 'employer') {
-        isEmployerMode = true;
-        if ($modeToggle) $modeToggle.checked = true;
-      } else {
-        isEmployerMode = false;
-        if ($modeToggle) $modeToggle.checked = false;
-      }
-      updateModeDisplay();
-      updateActionButton();
-      updateFavsButton();
-      renderJobs(visibleJobs, true);
-      
-      if ($modeToggle) {
-        $modeToggle.addEventListener('change', function() {
-          isEmployerMode = this.checked;
-          localStorage.setItem(LS_USER_MODE, isEmployerMode ? 'employer' : 'seeker');
-          updateModeDisplay();
-          updateActionButton();
-          updateFavsButton();
-          renderJobs(visibleJobs, true);
-        });
-      }
-    }
-
-    function updateModeDisplay() {
-      if ($modeDisplay) {
-        if (isEmployerMode) {
-          $modeDisplay.innerHTML = '👔 Режим: Работодатель';
-        } else {
-          $modeDisplay.innerHTML = '👤 Режим: Соискатель';
-        }
-      }
-    }
-
-    function updateActionButton() {
-      if (isEmployerMode) {
-        $actionButton.textContent = 'Опубликовать вакансию';
-        $actionButton.title = 'Опубликовать новую вакансию';
-      } else {
-        $actionButton.textContent = 'Мои заявки';
-        $actionButton.title = 'Посмотреть мои заявки на вакансии';
-      }
-    }
-
-    function updateFavsButton() {
-      if (isEmployerMode) {
-        $showFavs.innerHTML = '👥 Кандидаты вакансий <span id="fav-count" style="margin-left:6px;opacity:0.8">0</span>';
-        $showFavs.title = 'Просмотреть кандидатов на вакансии';
-      } else {
-        $showFavs.innerHTML = '❤ Сохранённые <span id="fav-count" style="margin-left:6px;opacity:0.8">0</span>';
-        $showFavs.title = 'Показать сохраненные вакансии';
-      }
-      updateFavCount();
+    function escapeHtml(str){
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
     function loadFavorites(){
@@ -1589,37 +689,17 @@
       updateFavCount();
     }
     
-    function updateFavCount(){
-      const favs = loadFavorites();
-      const $favCount = document.getElementById('fav-count');
-      if (isEmployerMode) {
-        $favCount.textContent = '0';
-      } else {
-        $favCount.textContent = favs.length;
-      }
-    }
-    
-    updateFavCount();
-
     function loadApplications() {
-      try {
-        return JSON.parse(localStorage.getItem(LS_APPLICATIONS) || '[]');
-      } catch(e) {
-        return [];
-      }
+      try{return JSON.parse(localStorage.getItem(LS_APPLICATIONS) || '[]');}catch(e){return [];}
     }
     
-    function saveApplications(applications) {
-      localStorage.setItem(LS_APPLICATIONS, JSON.stringify(applications));
+    function saveApplications(apps) {
+      localStorage.setItem(LS_APPLICATIONS, JSON.stringify(apps));
     }
-    
+
     function removeApplication(appId) {
       const applications = loadApplications();
-      const index = applications.findIndex(app => 
-        app.email === appId.email && 
-        app.timestamp === appId.timestamp
-      );
-      
+      const index = applications.findIndex(app => app.email === appId.email && app.timestamp === appId.timestamp);
       if (index !== -1) {
         applications.splice(index, 1);
         saveApplications(applications);
@@ -1628,517 +708,924 @@
       return false;
     }
 
+    function loadJobsFromStorage() {
+      try{
+        const saved = localStorage.getItem(LS_JOBS);
+        if(saved) {
+          const savedJobs = JSON.parse(saved);
+          savedJobs.forEach(job => {
+            if(!jobsData.find(j => j.id === job.id)) jobsData.push(job);
+          });
+        }
+      }catch(e){}
+    }
+
+    function saveJobsToStorage() {
+      try{
+        const employerJobs = jobsData.filter(j => j.employerId);
+        localStorage.setItem(LS_JOBS, JSON.stringify(employerJobs));
+      }catch(e){}
+    }
+
+    function loadChats() {
+      try{return JSON.parse(localStorage.getItem(LS_CHATS) || '[]');}catch(e){return [];}
+    }
+
+    function saveChats(chatsData) {
+      localStorage.setItem(LS_CHATS, JSON.stringify(chatsData));
+    }
+
+    function loadMessages() {
+      try{return JSON.parse(localStorage.getItem(LS_MESSAGES) || '[]');}catch(e){return [];}
+    }
+
+    function saveMessages(msgs) {
+      localStorage.setItem(LS_MESSAGES, JSON.stringify(msgs));
+    }
+
+    function updateFavCount(){
+      const favs = loadFavorites();
+      document.getElementById('fav-count').textContent = isEmployerMode ? '0' : favs.length;
+    }
+
+    function updateChatsCount() {
+      if(!currentUser) {
+        document.getElementById('unread-count').textContent = '0';
+        return;
+      }
+      const userChats = chats.filter(c => c.participant1 === currentUser.email || c.participant2 === currentUser.email);
+      const total = userChats.reduce((sum, c) => {
+        return sum + (c.participant1 === currentUser.email ? (c.unreadCount1 || 0) : (c.unreadCount2 || 0));
+      }, 0);
+      document.getElementById('unread-count').textContent = total;
+    }
+
+    function updateCandidatesCount() {
+      if(!currentUser || !isEmployerMode) {
+        if (!isEmployerMode) updateFavCount();
+        return;
+      }
+      const apps = loadApplications();
+      const employerJobs = jobsData.filter(j => j.employerId === currentUser.email).map(j => j.id);
+      const candidatesCount = apps.filter(a => employerJobs.includes(a.jobId)).length;
+      document.getElementById('fav-count').textContent = candidatesCount;
+    }
+
+    function getApplicationsCount(jobId) {
+      return loadApplications().filter(a => a.jobId === jobId).length;
+    }
+
+    function sortJobsByDate(jobs) {
+      return jobs.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    }
+
+    function getUserName(email) {
+      if (email === 'admin@teenhustle.ru') return 'Администратор';
+      const applications = loadApplications();
+      const app = applications.find(a => a.email === email);
+      if (app) return app.name;
+      return email.split('@')[0];
+    }
+
+    function updateProfileUI() {
+      if(currentUser) {
+        document.getElementById('profileInfo').style.display = 'flex';
+        document.getElementById('profileName').textContent = currentUser.name;
+        document.getElementById('profileAge').textContent = currentUser.age + ' лет';
+        document.getElementById('avatarText').textContent = currentUser.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+        updateDropdownContent();
+      }
+    }
+
+    function updateDropdownContent() {
+      const content = document.getElementById('profileDropdownContent');
+      content.innerHTML = `
+        <div class="dropdown-header">
+          <strong>${escapeHtml(currentUser.name)}</strong>
+          <div>${escapeHtml(currentUser.email)}</div>
+          <div style="color:var(--accent)">${currentUser.age} лет</div>
+        </div>
+        <div class="mode-switcher">
+          <span class="mode-label">Соискатель</span>
+          <label class="switch">
+            <input type="checkbox" id="modeToggle" ${isEmployerMode ? 'checked' : ''}>
+            <span class="slider"></span>
+          </label>
+          <span class="mode-label">Работодатель</span>
+        </div>
+        <div class="dropdown-item" id="mode-display">${isEmployerMode ? '👔 Работодатель' : '👤 Соискатель'}</div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item" id="editProfileBtn">✏️ Редактировать профиль</div>
+        <div class="dropdown-item" id="settings-btn">⚙️ Настройки</div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item" id="logoutBtn">🚪 Выйти</div>
+      `;
+
+      document.getElementById('modeToggle').addEventListener('change', function(e) {
+        isEmployerMode = e.target.checked;
+        currentUser.mode = isEmployerMode ? 'employer' : 'seeker';
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        document.getElementById('mode-display').innerHTML = isEmployerMode ? '👔 Работодатель' : '👤 Соискатель';
+        updateActionButton();
+        updateFavsButton();
+        updateCandidatesCount();
+        renderJobs(visibleJobs, true);
+        showNotification('🔄', 'Режим изменён', isEmployerMode ? 'Режим работодателя' : 'Режим соискателя');
+      });
+
+      document.getElementById('editProfileBtn').addEventListener('click', () => {
+        document.getElementById('profileDropdown').classList.remove('show');
+        openProfileEdit();
+      });
+
+      document.getElementById('settings-btn').addEventListener('click', () => {
+        document.getElementById('profileDropdown').classList.remove('show');
+        document.getElementById('devModal').style.display = 'flex';
+      });
+
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('currentUser');
+        currentUser = null;
+        isEmployerMode = false;
+        document.getElementById('profileInfo').style.display = 'none';
+        document.getElementById('avatarText').textContent = '👤';
+        document.getElementById('loginModal').style.display = 'flex';
+        updateChatsCount();
+        updateFavsButton();
+      });
+    }
+
+    function openProfileEdit() {
+      if(!currentUser) return;
+      document.getElementById('editProfileName').value = currentUser.name || '';
+      document.getElementById('editProfileEmail').value = currentUser.email || '';
+      document.getElementById('editProfileAge').value = currentUser.age || '';
+      document.getElementById('editProfileBio').value = currentUser.bio || '';
+      document.getElementById('editProfilePhone').value = currentUser.phone || '';
+      document.getElementById('profileEditModal').style.display = 'flex';
+    }
+
+    function updateActionButton() {
+      const btn = document.getElementById('action-button');
+      btn.textContent = isEmployerMode ? 'Опубликовать вакансию' : 'Мои заявки';
+    }
+
+    function updateFavsButton() {
+      const btn = document.getElementById('show-favs');
+      if (isEmployerMode) {
+        btn.innerHTML = '👥 Кандидаты <span id="fav-count">0</span>';
+        btn.title = 'Просмотреть кандидатов на вакансии';
+      } else {
+        btn.innerHTML = '❤ Сохранённые <span id="fav-count">0</span>';
+        btn.title = 'Показать сохраненные вакансии';
+      }
+      if (isEmployerMode) {
+        updateCandidatesCount();
+      } else {
+        updateFavCount();
+      }
+    }
+
+    function updateAgeField() {
+      const ageInput = document.getElementById('loginAge');
+      const hint = document.getElementById('ageHint');
+      if(document.getElementById('userTypeSeeker').checked) {
+        ageInput.min = 14; ageInput.max = 17; ageInput.value = 16;
+        hint.textContent = 'Для соискателя: от 14 до 17 лет';
+      } else {
+        ageInput.min = 18; ageInput.max = 100; ageInput.value = 35;
+        hint.textContent = 'Для работодателя: от 18 лет';
+      }
+    }
+
+    function getOrCreateChat(p1, p2, jobId, jobTitle) {
+      let chat = chats.find(c => (c.participant1 === p1 && c.participant2 === p2) || (c.participant1 === p2 && c.participant2 === p1));
+      if(!chat) {
+        chat = {id:'chat_'+Date.now(), participant1:p1, participant2:p2, jobId, jobTitle, createdAt:Date.now(), unreadCount1:0, unreadCount2:0};
+        chats.push(chat);
+        saveChats(chats);
+      }
+      return chat;
+    }
+
+    function sendMessage(chatId, sender, text) {
+      const msg = {id:'msg_'+Date.now(), chatId, sender, text, timestamp:Date.now(), read:false};
+      messages.push(msg);
+      saveMessages(messages);
+      const chat = chats.find(c => c.id === chatId);
+      if(chat) {
+        chat.lastMessage = text;
+        chat.lastMessageTime = Date.now();
+        if(chat.participant1 === sender) chat.unreadCount2++; else chat.unreadCount1++;
+        saveChats(chats);
+      }
+      updateChatsCount();
+      return msg;
+    }
+
+    function getChatMessages(chatId) {
+      return messages.filter(m => m.chatId === chatId).sort((a,b) => a.timestamp - b.timestamp);
+    }
+
+    function markMessagesAsRead(chatId, userEmail) {
+      const chat = chats.find(c => c.id === chatId);
+      if(chat) {
+        if(chat.participant1 === userEmail) chat.unreadCount1 = 0; else chat.unreadCount2 = 0;
+        saveChats(chats);
+        messages.forEach(m => {if(m.chatId === chatId && m.sender !== userEmail) m.read = true;});
+        saveMessages(messages);
+      }
+      updateChatsCount();
+    }
+
+    function openChat(chatId = null, jobId = null, employerEmail = null, seekerEmail = null, jobTitle = null) {
+      if(!currentUser) {
+        document.getElementById('loginModal').style.display = 'flex';
+        return;
+      }
+      if(jobId && employerEmail && seekerEmail) {
+        const chat = getOrCreateChat(employerEmail, seekerEmail, jobId, jobTitle);
+        chatId = chat.id;
+      }
+      currentChatId = chatId;
+      renderChatList();
+      renderChatMessages();
+      document.getElementById('chatModal').style.display = 'flex';
+    }
+
+    function renderChatList() {
+      const list = document.getElementById('chatList');
+      const userChats = chats.filter(c => c.participant1 === currentUser.email || c.participant2 === currentUser.email)
+        .sort((a,b) => (b.lastMessageTime || b.createdAt) - (a.lastMessageTime || a.createdAt));
+      
+      if(!userChats.length) {
+        list.innerHTML = '<div style="text-align:center;padding:20px">Нет чатов</div>';
+        return;
+      }
+      
+      list.innerHTML = userChats.map(chat => {
+        const other = chat.participant1 === currentUser.email ? chat.participant2 : chat.participant1;
+        const otherName = getUserName(other);
+        const unread = chat.participant1 === currentUser.email ? chat.unreadCount1 : chat.unreadCount2;
+        return `
+          <div class="chat-list-item ${chat.id === currentChatId ? 'active' : ''}" onclick="selectChat('${chat.id}')">
+            <div class="chat-avatar">${otherName.substring(0,2).toUpperCase()}</div>
+            <div class="chat-info">
+              <div class="chat-name">${escapeHtml(otherName)} ${unread ? `<span class="unread-badge">${unread}</span>` : ''}</div>
+              ${chat.jobTitle ? `<div class="chat-preview">📋 ${escapeHtml(chat.jobTitle)}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectChat(chatId) {
+      currentChatId = chatId;
+      const chat = chats.find(c => c.id === chatId);
+      if(chat) {
+        markMessagesAsRead(chatId, currentUser.email);
+        const other = chat.participant1 === currentUser.email ? chat.participant2 : chat.participant1;
+        const otherName = getUserName(other);
+        document.getElementById('currentChatName').textContent = `Чат с ${otherName}`;
+      }
+      renderChatList();
+      renderChatMessages();
+      document.getElementById('chatInputContainer').style.display = 'flex';
+    }
+
+    function renderChatMessages() {
+      const container = document.getElementById('chatMessages');
+      if(!currentChatId) {
+        container.innerHTML = '<div style="text-align:center;padding:40px">Выберите чат</div>';
+        return;
+      }
+      const msgs = getChatMessages(currentChatId);
+      if(!msgs.length) {
+        container.innerHTML = '<div style="text-align:center;padding:40px">Нет сообщений</div>';
+        return;
+      }
+      
+      container.innerHTML = msgs.map(msg => {
+        const isOwn = msg.sender === currentUser.email;
+        const senderName = isOwn ? 'Вы' : getUserName(msg.sender);
+        const time = new Date(msg.timestamp).toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
+        
+        return `
+          <div class="chat-message ${isOwn ? 'own' : 'other'}">
+            ${!isOwn ? `<div class="message-avatar">${senderName.substring(0,2).toUpperCase()}</div>` : ''}
+            <div class="message-content">
+              <div class="message-header">
+                <span class="message-sender">${escapeHtml(senderName)}</span>
+                <span class="message-time">${time}</span>
+              </div>
+              <div class="message-bubble">${escapeHtml(msg.text)}</div>
+            </div>
+            ${isOwn ? `<div class="message-avatar">${currentUser.name.substring(0,2).toUpperCase()}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+      
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function startChatWithSeeker(seekerEmail, jobId, jobTitle) {
+      openChat(null, jobId, currentUser.email, seekerEmail, jobTitle);
+    }
+
     function createJobCard(job){
       const card = document.createElement('article');
-      card.className = 'job';
-      card.setAttribute('role','listitem');
+      card.className = 'job' + (job.employerId === currentUser?.email ? ' employer-job' : '') + (Date.now() - job.createdAt < 86400000 ? ' new-job' : '');
       
-      let actionButtons = '';
-      if (isEmployerMode) {
-        actionButtons = `
-          <button class="btn applications" data-id="${job.id}" aria-label="Просмотреть отклики на ${escapeHtml(job.title)}">📊 Отклики</button>
-          <button class="ghost edit-job" data-id="${job.id}">✏ Редактировать</button>
+      let actions = '';
+      if(isEmployerMode) {
+        const isOwner = job.employerId === currentUser?.email;
+        actions = `
+          <div style="display:flex;flex-direction:row;gap:8px;align-items:center;">
+            <button class="chat-btn chat-employer" data-job-id="${job.id}" data-job-title="${escapeHtml(job.title)}">💬 Чат</button>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <button class="btn applications" data-id="${job.id}">📊 Отклики (${getApplicationsCount(job.id)})</button>
+              ${isOwner ? `<button class="ghost edit-job" data-id="${job.id}">✏️ Редактировать</button>` : ''}
+            </div>
+          </div>
         `;
       } else {
-        actionButtons = `
-          <button class="btn apply" data-id="${job.id}" aria-label="Откликнуться на ${escapeHtml(job.title)}">Откликнуться!</button>
-          <button class="ghost fav" data-id="${job.id}" aria-pressed="false">❤ Сохранить!</button>
+        actions = `
+          <div style="display:flex;flex-direction:row;gap:8px;align-items:center;">
+            <button class="chat-btn chat-seeker" data-job-id="${job.id}" data-employer="${job.employerId || 'admin@teenhustle.ru'}" data-job-title="${escapeHtml(job.title)}">💬 Чат</button>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <button class="btn apply" data-id="${job.id}">Откликнуться</button>
+              <button class="ghost fav" data-id="${job.id}">❤️ Сохранить</button>
+            </div>
+          </div>
         `;
       }
       
       card.innerHTML = `
         <div class="meta">
-          <h3>${escapeHtml(job.title)}</h3>
-          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
-            <small style="opacity:0.9">${escapeHtml(job.company || job.location)}</small>
-            <small style="opacity:0.9">•</small>
-            <small style="opacity:0.9">${escapeHtml(job.location)}</small>
-          </div>
-          <p style="margin:8px 0 0 0;font-size:.95rem;opacity:0.9">${escapeHtml(job.description)}</p>
-          <div class="chips" aria-hidden="false">
+          <h3>${escapeHtml(job.title)} ${Date.now() - job.createdAt < 86400000 ? '<span class="new-badge">NEW</span>' : ''}</h3>
+          <div><small>${escapeHtml(job.company || job.location)}</small> <small>•</small> <small>${escapeHtml(job.location)}</small> ${job.salary ? `<small>•</small><small style="color:var(--accent)">${escapeHtml(job.salary)}</small>` : ''}</div>
+          <p>${escapeHtml(job.description)}</p>
+          <div class="chips">
             <span class="chip">${escapeHtml(job.type)}</span>
-            <span class="chip">${job.remote ? 'Удалённая работа' : (job.hoursPerWeek > 0 ? job.hoursPerWeek + ' часов в неделю' : 'Гибкий график')}</span>
-            <span class="chip">мин. возраст: ${job.МинимальныйВозраст}+</span>
+            <span class="chip">${job.remote ? 'Удалённо' : job.hoursPerWeek + ' ч/нед'}</span>
+            <span class="chip">от ${job.МинимальныйВозраст} лет</span>
             ${job.tags.slice(0,3).map(t => `<span class="chip">${escapeHtml(t)}</span>`).join('')}
           </div>
         </div>
-        <div class="actions">
-          ${actionButtons}
-          <small style="opacity:0.8">${job.type}</small>
-        </div>
+        <div class="actions">${actions}</div>
       `;
       
-      if (!isEmployerMode) {
-        card.querySelector('.apply')?.addEventListener('click', () => openApplyModal(job.id));
-        const favBtn = card.querySelector('.fav');
-        favBtn?.addEventListener('click', () => toggleFav(job.id, favBtn));
-        const favs = loadFavorites();
-        if (favs.includes(job.id)) {
-          favBtn.setAttribute('aria-pressed','true'); 
-          favBtn.textContent = '✓ Сохранено!';
-          favBtn.style.color = 'var(--accent)';
+      setTimeout(() => {
+        if(!isEmployerMode) {
+          card.querySelector('.apply')?.addEventListener('click', () => openApplyModal(job.id));
+          const favBtn = card.querySelector('.fav');
+          favBtn?.addEventListener('click', () => toggleFav(job.id, favBtn));
+          if(loadFavorites().includes(job.id)) { favBtn.textContent = '✓ Сохранено'; favBtn.style.color = 'var(--accent)'; }
+          card.querySelector('.chat-seeker')?.addEventListener('click', function() {
+            openChat(null, this.dataset.jobId, this.dataset.employer, currentUser.email, this.dataset.jobTitle);
+          });
+        } else {
+          card.querySelector('.applications')?.addEventListener('click', () => viewApplications(job.id));
+          card.querySelector('.edit-job')?.addEventListener('click', () => openJobForm(job.id));
+          card.querySelector('.chat-employer')?.addEventListener('click', function() {
+            openChatList(this.dataset.jobId, this.dataset.jobTitle);
+          });
         }
-      } else {
-        card.querySelector('.applications')?.addEventListener('click', () => viewApplications(job.id));
-        card.querySelector('.edit-job')?.addEventListener('click', () => editJob(job.id));
-      }
+      }, 0);
       
       return card;
     }
 
-    function renderJobs(list, reset=true){
-      if (reset){ 
-        $jobs.innerHTML = ''; 
-        page = 0; 
+    function openChatList(jobId, jobTitle) {
+      const apps = loadApplications().filter(a => a.jobId === jobId);
+      if(!apps.length) {
+        showNotification('📭', 'Нет откликов', 'Никто не откликнулся');
+        return;
       }
-      const start = page * pageSize;
-      const end = start + pageSize;
-      const slice = list.slice(start, end);
-      slice.forEach(job => $jobs.appendChild(createJobCard(job)));
+      const modal = document.createElement('div');
+      modal.className = 'modal-backdrop';
+      modal.style.display = 'flex';
+      modal.innerHTML = `
+        <div class="modal">
+          <header><strong>Чат с соискателями - ${escapeHtml(jobTitle)}</strong><button class="ghost" onclick="this.closest('.modal-backdrop').remove()">✕</button></header>
+          <div class="chat-list">${apps.map(a => `
+            <div class="chat-list-item" onclick="startChatWithSeeker('${a.email}', '${jobId}', '${escapeHtml(jobTitle)}'); this.closest('.modal-backdrop').remove()">
+              <div class="chat-avatar">${a.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase()}</div>
+              <div class="chat-info"><div class="chat-name">${escapeHtml(a.name)}</div><div>${escapeHtml(a.email)}</div></div>
+            </div>
+          `).join('')}</div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    function renderJobs(list, reset=true){
+      const container = document.getElementById('jobs');
+      if(reset){ container.innerHTML = ''; page = 0; }
+      const sorted = sortJobsByDate([...list]);
+      const slice = sorted.slice(page * pageSize, (page + 1) * pageSize);
+      slice.forEach(j => container.appendChild(createJobCard(j)));
       page++;
-      
-      $loadMore.style.display = (page * pageSize < list.length) ? 'inline-block' : 'none';
+      document.getElementById('loadMore').style.display = (page * pageSize < list.length) ? 'inline-block' : 'none';
       updateStats(list);
     }
 
     function updateStats(list) {
-      $statCount.textContent = list.length;
-      $statRemote.textContent = list.filter(j => j.remote).length;
-      $statTypes.textContent = new Set(list.map(j => j.type)).size;
-    }
-
-    function matchesFilter(job, q, type, loc, ageVal, maxHoursVal){
-      if (q) {
-        const searchText = (job.title + ' ' + (job.company || '') + ' ' + job.description + ' ' + job.tags.join(' ')).toLowerCase();
-        if (!searchText.includes(q.toLowerCase())) {
-          return false;
-        }
-      }
-      
-      if (type && job.type !== type) {
-        return false;
-      }
-      
-      if (loc) {
-        const locLower = loc.toLowerCase();
-        if (locLower.includes('дом') || locLower.includes('удален') || locLower.includes('из дома')) {
-          if (!job.remote) return false;
-        } else if (!job.location.toLowerCase().includes(locLower)) {
-          return false;
-        }
-      }
-      
-      if (ageVal) {
-        const age = Number(ageVal);
-        if (age < 14 || age > 17) return false;
-        if (age < Number(job.МинимальныйВозраст)) return false;
-      }
-      
-      if (maxHoursVal && maxHoursVal !== '') {
-        const maxHours = Number(maxHoursVal);
-        if (job.hoursPerWeek > maxHours) return false;
-      }
-      
-      return true;
+      document.getElementById('stat-count').textContent = list.length;
+      document.getElementById('stat-remote').textContent = list.filter(j => j.remote).length;
+      document.getElementById('stat-types').textContent = new Set(list.map(j => j.type)).size;
     }
 
     function performSearch(e){
-      if (e) e.preventDefault && e.preventDefault();
+      e?.preventDefault();
+      const q = document.getElementById('q').value.trim().toLowerCase();
+      const type = document.getElementById('type').value;
+      const loc = document.getElementById('location').value.trim().toLowerCase();
+      const age = document.getElementById('age').value;
+      const maxHours = document.getElementById('maxHours').value;
       
-      const q = $q.value.trim();
-      const type = $type.value;
-      const loc = $location.value.trim();
-      const ageVal = $age.value ? Number($age.value) : null;
-      const maxHoursVal = $maxHours.value;
-      
-      if (ageVal && (ageVal < 14 || ageVal > 17)) {
-        showNotification('❌', 'Ошибка', 'Для подростков от 14 до 17 лет включительно');
-        $age.focus();
-        return;
-      }
+      visibleJobs = jobsData.filter(j => {
+        if(q && !(j.title + j.description + j.tags.join(' ')).toLowerCase().includes(q)) return false;
+        if(type && j.type !== type) return false;
+        if(loc) {
+          if(loc.includes('дом') && !j.remote) return false;
+          else if(!loc.includes('дом') && !j.location.toLowerCase().includes(loc)) return false;
+        }
+        if(age && Number(age) < j.МинимальныйВозраст) return false;
+        if(maxHours && j.hoursPerWeek > Number(maxHours)) return false;
+        return true;
+      });
       
       isShowingFavorites = false;
-      visibleJobs = jobsData.filter(job => matchesFilter(job, q, type, loc, ageVal, maxHoursVal));
       renderJobs(visibleJobs, true);
-      
-      showNotification('🔍', 'Поиск выполнен', `Найдено вакансий: ${visibleJobs.length}`);
+      showNotification('🔍', 'Поиск', `Найдено: ${visibleJobs.length}`);
     }
 
-    function toggleFav(id, button){
+    function toggleFav(id, btn){
       const favs = loadFavorites();
       const idx = favs.indexOf(id);
-      if (idx === -1){
-        favs.push(id);
-        button.setAttribute('aria-pressed','true'); 
-        button.textContent = '✓ Сохранено!';
-        button.style.color = 'var(--accent)';
-        showNotification('❤️', 'Сохранено', 'Вакансия добавлена в избранное');
-      } else {
-        favs.splice(idx,1);
-        button.setAttribute('aria-pressed','false'); 
-        button.textContent = '❤ Сохранить!';
-        button.style.color = '';
-        showNotification('💔', 'Удалено', 'Вакансия удалена из избранного');
-      }
+      if(idx === -1) { favs.push(id); btn.textContent = '✓ Сохранено'; btn.style.color = 'var(--accent)'; showNotification('❤️', 'Сохранено', 'В избранном'); }
+      else { favs.splice(idx, 1); btn.textContent = '❤️ Сохранить'; btn.style.color = ''; showNotification('💔', 'Удалено', 'Из избранного'); }
       saveFavorites(favs);
-      
-      if (isShowingFavorites) {
-        showFavorites();
-      }
-      updateFavCount();
+      if(isShowingFavorites) showFavorites();
     }
 
     function showFavorites(){
-      if (isEmployerMode) {
+      if(isEmployerMode) {
         viewAllCandidates();
       } else {
         const favs = loadFavorites();
-        const list = jobsData.filter(j => favs.includes(j.id));
+        visibleJobs = jobsData.filter(j => favs.includes(j.id));
         isShowingFavorites = true;
-        renderJobs(list, true);
-        showNotification('⭐', 'Избранное', `Показано ${list.length} сохраненных вакансий`);
+        renderJobs(visibleJobs, true);
       }
     }
 
     function openApplyModal(jobId){
-      if (!currentUser) {
-        showNotification('⚠️', 'Требуется вход', 'Пожалуйста, войдите в профиль');
-        document.getElementById('loginModal').style.display = 'flex';
-        return;
-      }
-      const job = jobsData.find(j => j.id === jobId);
-      modalTitle.textContent = 'Откликнуться на вакансию: ' + job.title;
-      jobIdField.value = jobId;
-      modal.style.display = 'flex';
-      modal.setAttribute('aria-hidden','false');
-      
-      document.getElementById('applyForm').reset();
-      
-      document.getElementById('appName').focus();
-    }
-    
-    function closeModal(){
-      modal.style.display = 'none';
-      modal.setAttribute('aria-hidden','true');
-      document.getElementById('applyForm').reset();
+      if(!currentUser) { document.getElementById('loginModal').style.display = 'flex'; return; }
+      document.getElementById('modalTitle').textContent = 'Откликнуться: ' + jobsData.find(j => j.id === jobId).title;
+      document.getElementById('jobId').value = jobId;
+      document.getElementById('modal').style.display = 'flex';
     }
 
-    function viewApplications(jobId) {
-      const job = jobsData.find(j => j.id === jobId);
-      currentJobIdForApplications = jobId;
-      employerModalTitle.textContent = 'Отклики на вакансию: ' + job.title;
-      renderCandidatesList(jobId);
-    }
-    
-    function renderCandidatesList(jobId = null) {
-      const applications = loadApplications();
-      let filteredApplications = applications;
+    function closeModal(){ document.getElementById('modal').style.display = 'none'; }
+
+    function viewApplications(jobId){
+      document.getElementById('employerModalTitle').textContent = 'Отклики: ' + jobsData.find(j => j.id === jobId).title;
+      const apps = loadApplications().filter(a => a.jobId === jobId);
+      const list = document.getElementById('candidatesList');
+      const empty = document.getElementById('emptyCandidatesState');
       
-      if (jobId) {
-        filteredApplications = applications.filter(app => app.jobId === jobId);
+      if(apps.length) {
+        list.style.display = 'block'; empty.style.display = 'none';
+        list.innerHTML = apps.map(a => `
+          <div class="candidate-item" data-app-id='${JSON.stringify({email:a.email, timestamp:a.timestamp})}'>
+            <div><strong>${escapeHtml(a.name)}</strong> <span style="color:var(--accent)">${a.age} лет</span></div>
+            <div>Email: ${escapeHtml(a.email)}</div>
+            <div>Навыки: ${escapeHtml(a.skills)}</div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button class="ghost" onclick="openChat(null, '${jobId}', '${currentUser.email}', '${a.email}', '${jobsData.find(j=>j.id===jobId)?.title}')">💬 Чат</button>
+              <button class="btn" style="font-size:0.8rem;padding:6px 10px" onclick="acceptCandidate(this, '${a.email}', '${a.timestamp}')">✅ Принять</button>
+              <button class="reject-btn" onclick="rejectCandidate(this, '${a.email}', '${a.timestamp}')">❌ Отказать</button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        list.style.display = 'none'; empty.style.display = 'block';
       }
+      document.getElementById('employerModal').style.display = 'flex';
+    }
+
+    function viewAllCandidates(){
+      document.getElementById('employerModalTitle').textContent = 'Все кандидаты';
+      const apps = loadApplications().filter(a => jobsData.find(j => j.id === a.jobId && j.employerId === currentUser?.email));
+      const list = document.getElementById('candidatesList');
+      const empty = document.getElementById('emptyCandidatesState');
       
-      if (filteredApplications.length > 0) {
-        candidatesList.style.display = 'block';
-        candidatesList.innerHTML = '';
-        
-        filteredApplications.forEach((app, index) => {
-          const job = jobsData.find(j => j.id === app.jobId);
-          
-          const candidateElement = document.createElement('div');
-          candidateElement.className = 'candidate-item';
-          candidateElement.setAttribute('data-app-id', JSON.stringify({email: app.email, timestamp: app.timestamp}));
-          
-          candidateElement.innerHTML = `
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-              <strong style="font-size:1rem">${escapeHtml(app.name)}</strong>
-              <span style="color:var(--accent);font-size:0.9rem">${app.age} лет</span>
-            </div>
-            
-            <div style="margin-bottom:10px">
-              <div style="font-size:0.85rem;opacity:0.9;margin-bottom:4px">
-                <strong>Email:</strong> ${escapeHtml(app.email)}
+      if(apps.length) {
+        list.style.display = 'block'; empty.style.display = 'none';
+        list.innerHTML = apps.map(a => {
+          const job = jobsData.find(j => j.id === a.jobId);
+          return `
+            <div class="candidate-item" data-app-id='${JSON.stringify({email:a.email, timestamp:a.timestamp})}'>
+              <div><strong>${escapeHtml(a.name)}</strong> <span style="color:var(--accent)">${a.age} лет</span></div>
+              <div>Вакансия: ${job ? escapeHtml(job.title) : 'Неизвестно'}</div>
+              <div>Email: ${escapeHtml(a.email)}</div>
+              <div style="display:flex;gap:8px;margin-top:12px">
+                <button class="ghost" onclick="openChat(null, '${a.jobId}', '${currentUser.email}', '${a.email}', '${job?.title}')">💬 Чат</button>
+                <button class="btn" style="font-size:0.8rem;padding:6px 10px" onclick="acceptCandidate(this, '${a.email}', '${a.timestamp}')">✅ Принять</button>
+                <button class="reject-btn" onclick="rejectCandidate(this, '${a.email}', '${a.timestamp}')">❌ Отказать</button>
               </div>
-              ${jobId ? '' : `<div style="font-size:0.85rem;opacity:0.9;margin-bottom:4px">
-                <strong>Вакансия:</strong> ${job ? escapeHtml(job.title) : 'Неизвестная вакансия'}
-              </div>`}
-              <div style="font-size:0.85rem;opacity:0.9;margin-bottom:4px">
-                <strong>Навыки:</strong> ${escapeHtml(app.skills)}
-              </div>
-              <div style="font-size:0.85rem;opacity:0.9;margin-bottom:4px">
-                <strong>Отправлено:</strong> ${new Date(app.timestamp).toLocaleString('ru-RU')}
-              </div>
-            </div>
-            
-            <div class="resume-section">
-              <h5>📄 Резюме кандидата</h5>
-              <div class="resume-content">
-                <p style="margin:0 0 8px 0">${escapeHtml(app.note || 'Кандидат предоставил резюме с подробным описанием опыта и навыков.')}</p>
-                <a href="#" class="resume-link" onclick="event.preventDefault(); showNotification('📄', 'Резюме', 'Функция просмотра резюме в разработке');">
-                  <span>🔗 Открыть резюме</span>
-                </a>
-              </div>
-            </div>
-            
-            ${app.motivation ? `
-            <div class="resume-section">
-              <h5>💬 Мотивационное письмо</h5>
-              <div class="resume-content">
-                ${escapeHtml(app.motivation)}
-              </div>
-            </div>
-            ` : ''}
-            
-            <div style="display:flex;gap:8px;margin-top:12px;justify-content:space-between">
-              <div style="display:flex;gap:8px">
-                <button class="ghost" style="font-size:0.8rem" onclick="event.stopPropagation();contactCandidate('${escapeHtml(app.email)}')">
-                  📧 Написать
-                </button>
-                <button class="btn" style="font-size:0.8rem;padding:6px 10px" onclick="event.stopPropagation();acceptCandidate(this, '${escapeHtml(app.email)}', '${app.timestamp}')">
-                  ✅ Принять
-                </button>
-              </div>
-              <button class="reject-btn" onclick="event.stopPropagation();rejectCandidate(this, '${escapeHtml(app.email)}', '${app.timestamp}')">
-                ❌ Отказать
-              </button>
             </div>
           `;
-          
-          candidatesList.appendChild(candidateElement);
-        });
-        
-        document.getElementById('employerModalContent').querySelector('div[style*="text-align:center"]').style.display = 'none';
+        }).join('');
       } else {
-        candidatesList.style.display = 'none';
-        document.getElementById('employerModalContent').querySelector('div[style*="text-align:center"]').style.display = 'block';
+        list.style.display = 'none'; empty.style.display = 'block';
       }
-      
-      employerModal.style.display = 'flex';
-      employerModal.setAttribute('aria-hidden','false');
+      document.getElementById('employerModal').style.display = 'flex';
     }
-    
-    function viewAllCandidates() {
-      employerModalTitle.textContent = 'Все кандидаты на ваши вакансии';
-      renderCandidatesList();
-    }
-    
-    function closeEmployerModal(){
-      employerModal.style.display = 'none';
-      employerModal.setAttribute('aria-hidden','true');
-      candidatesList.style.display = 'none';
-      document.getElementById('employerModalContent').querySelector('div[style*="text-align:center"]').style.display = 'block';
-    }
-    
-    function contactCandidate(email) {
-      showNotification('📧', 'Написать', `Функция отправки сообщений на email ${email} в разработке`);
-    }
-    
+
     function acceptCandidate(button, email, timestamp) {
       const candidateItem = button.closest('.candidate-item');
-      const appId = JSON.parse(candidateItem.getAttribute('data-app-id'));
+      const appId = {email, timestamp};
       
       if (confirm(`Принять кандидата на работу? На email ${email} будет отправлено приглашение.`)) {
         candidateItem.classList.add('removing');
-        
         setTimeout(() => {
           if (removeApplication(appId)) {
             candidateItem.remove();
-            
-            const remainingCandidates = candidatesList.querySelectorAll('.candidate-item');
+            const remainingCandidates = document.querySelectorAll('.candidate-item');
             if (remainingCandidates.length === 0) {
-              candidatesList.style.display = 'none';
-              document.getElementById('employerModalContent').querySelector('div[style*="text-align:center"]').style.display = 'block';
+              document.getElementById('candidatesList').style.display = 'none';
+              document.getElementById('emptyCandidatesState').style.display = 'block';
             }
-            
+            updateCandidatesCount();
             showNotification('✅', 'Кандидат принят!', `Приглашение отправлено на ${email}`);
-          } else {
-            showNotification('❌', 'Ошибка', 'Не удалось найти заявку кандидата');
           }
         }, 300);
       }
     }
-    
+
     function rejectCandidate(button, email, timestamp) {
       const candidateItem = button.closest('.candidate-item');
-      const appId = JSON.parse(candidateItem.getAttribute('data-app-id'));
+      const appId = {email, timestamp};
       
       if (confirm(`Отказать кандидату? На email ${email} будет отправлено уведомление об отказе.`)) {
         candidateItem.classList.add('removing');
-        
         setTimeout(() => {
           if (removeApplication(appId)) {
             candidateItem.remove();
-            
-            const remainingCandidates = candidatesList.querySelectorAll('.candidate-item');
+            const remainingCandidates = document.querySelectorAll('.candidate-item');
             if (remainingCandidates.length === 0) {
-              candidatesList.style.display = 'none';
-              document.getElementById('employerModalContent').querySelector('div[style*="text-align:center"]').style.display = 'block';
+              document.getElementById('candidatesList').style.display = 'none';
+              document.getElementById('emptyCandidatesState').style.display = 'block';
             }
-            
+            updateCandidatesCount();
             showNotification('❌', 'Отказ отправлен', `Кандидату на email ${email}`);
-          } else {
-            showNotification('❌', 'Ошибка', 'Не удалось найти заявку кандидата');
           }
         }, 300);
       }
     }
 
-    function editJob(jobId) {
-      showNotification('✏️', 'Редактирование', 'Функция редактирования вакансии в разработке');
+    function closeEmployerModal(){ document.getElementById('employerModal').style.display = 'none'; }
+
+    function openJobForm(jobId = null){
+      if(!currentUser || currentUser.mode !== 'employer') { showNotification('⚠️', 'Только для работодателей'); return; }
+      const form = document.getElementById('jobForm');
+      form.reset();
+      currentJobTags = [];
+      updateTagsDisplay();
+      
+      if(jobId) {
+        const job = jobsData.find(j => j.id === jobId);
+        if(!job) return;
+        document.getElementById('jobFormTitle').textContent = 'Редактировать';
+        document.getElementById('submitJobBtn').textContent = 'Сохранить';
+        document.getElementById('deleteJobBtn').style.display = 'block';
+        document.getElementById('editingJobId').value = jobId;
+        document.getElementById('jobTitle').value = job.title;
+        document.getElementById('jobCompany').value = job.company || '';
+        document.getElementById('jobLocation').value = job.location;
+        document.getElementById('jobType').value = job.type;
+        document.getElementById('jobRemote').checked = job.remote;
+        document.getElementById('jobHours').value = job.hoursPerWeek;
+        document.getElementById('jobMinAge').value = job.МинимальныйВозраст;
+        document.getElementById('jobDescription').value = job.description;
+        document.getElementById('jobSalary').value = job.salary || '';
+        currentJobTags = [...(job.tags || [])];
+        updateTagsDisplay();
+      } else {
+        document.getElementById('jobFormTitle').textContent = 'Опубликовать';
+        document.getElementById('submitJobBtn').textContent = 'Опубликовать';
+        document.getElementById('deleteJobBtn').style.display = 'none';
+        document.getElementById('editingJobId').value = '';
+        document.getElementById('jobMinAge').value = 14;
+        document.getElementById('jobHours').value = 10;
+      }
+      document.getElementById('jobFormModal').style.display = 'flex';
     }
 
-    document.getElementById('closeModal').addEventListener('click', closeModal);
-    document.getElementById('cancelApply').addEventListener('click', closeModal);
-    
-    document.getElementById('closeEmployerModal').addEventListener('click', closeEmployerModal);
-    document.getElementById('cancelEmployerModal').addEventListener('click', closeEmployerModal);
-    
-    window.addEventListener('keydown', e => { 
-      if (e.key === 'Escape') {
-        closeModal();
-        closeEmployerModal();
-        document.getElementById('myApplicationsModal').style.display = 'none';
-        
-        document.querySelectorAll('.modal-backdrop').forEach(modal => {
-          modal.style.display = 'none';
-        });
-      }
-    });
+    function closeJobFormModal(){ document.getElementById('jobFormModal').style.display = 'none'; }
 
-    document.getElementById('applyForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      
-      if (!currentUser) {
-        showNotification('⚠️', 'Требуется вход', 'Пожалуйста, войдите в профиль');
-        document.getElementById('loginModal').style.display = 'flex';
-        return;
-      }
-      
-      const name = document.getElementById('appName').value.trim();
-      const email = document.getElementById('appEmail').value.trim();
-      const age = Number(document.getElementById('appAge').value);
-      const skills = document.getElementById('appSkills').value.trim();
-      const motivation = document.getElementById('appMotivation').value.trim();
-      const guardian = document.getElementById('appGuardian').checked;
-      const schedule = document.getElementById('appSchedule').checked;
-      const documents = document.getElementById('appDocuments').checked;
-      const note = document.getElementById('appNote').value.trim();
-      const jobId = document.getElementById('jobId').value;
-      
-      if (!name || !email) { 
-        showNotification('❌', 'Ошибка', 'Заполните все обязательные поля: ФИО и Email');
-        return; 
-      }
-      
-      if (age < 14 || age > 17) { 
-        showNotification('❌', 'Ошибка', 'Вакансии доступны только для подростков от 14 до 17 лет');
-        document.getElementById('appAge').focus();
-        return; 
-      }
-      
-      if (!guardian || !schedule || !documents) {
-        showNotification('❌', 'Ошибка', 'Необходимо согласиться со всеми условиями');
-        return;
-      }
-      
-      if (!skills) {
-        showNotification('❌', 'Ошибка', 'Укажите хотя бы один навык');
-        document.getElementById('appSkills').focus();
-        return;
-      }
-      
-      closeModal();
-      
-      const applicationData = {
-        jobId: jobId,
-        name: name,
-        age: age,
-        email: email,
-        skills: skills,
-        motivation: motivation,
-        note: note || 'Кандидат предоставил резюме с подробным описанием опыта и навыков.',
-        timestamp: new Date().toISOString()
+    function addTagFromInput(){
+      const input = document.getElementById('jobTagsInput');
+      const tag = input.value.trim();
+      if(tag && !currentJobTags.includes(tag)) { currentJobTags.push(tag); updateTagsDisplay(); }
+      input.value = '';
+    }
+
+    function removeTag(tag){
+      const idx = currentJobTags.indexOf(tag);
+      if(idx > -1) { currentJobTags.splice(idx, 1); updateTagsDisplay(); }
+    }
+
+    function updateTagsDisplay(){
+      const container = document.getElementById('tagsContainer');
+      container.innerHTML = currentJobTags.map(t => `<span class="tag-item">${escapeHtml(t)} <button type="button" onclick="removeTag('${escapeHtml(t)}')">&times;</button></span>`).join('');
+    }
+
+    function saveJob(formData){
+      const editingId = document.getElementById('editingJobId').value;
+      const jobData = {
+        title: formData.title, company: formData.company || 'Частное лицо', location: formData.location,
+        type: formData.type, remote: formData.remote, hoursPerWeek: parseInt(formData.hoursPerWeek) || 0,
+        МинимальныйВозраст: parseInt(formData.minAge), description: formData.description,
+        tags: currentJobTags, salary: formData.salary, employerId: currentUser.email,
+        createdAt: editingId ? jobsData.find(j => j.id === editingId)?.createdAt : Date.now()
       };
       
-      const applications = loadApplications();
-      applications.push(applicationData);
-      saveApplications(applications);
-      
-      showNotification('✅', 'Заявка отправлена!', 'Работодатель рассмотрит её в ближайшее время');
-    });
-
-    $actionButton.addEventListener('click', function() {
-      if (!currentUser) {
-        showNotification('⚠️', 'Требуется вход', 'Пожалуйста, войдите в профиль');
-        document.getElementById('loginModal').style.display = 'flex';
-        return;
-      }
-      
-      if (isEmployerMode) {
-        document.getElementById('devModal').style.display = 'flex';
+      if(editingId) {
+        const idx = jobsData.findIndex(j => j.id === editingId);
+        if(idx !== -1) { jobData.id = editingId; jobsData[idx] = {...jobsData[idx], ...jobData}; }
+        showNotification('✅', 'Обновлено', 'Вакансия сохранена');
       } else {
-        showMyApplications();
+        jobData.id = 'job_' + Date.now();
+        jobData.createdAt = Date.now();
+        jobsData.push(jobData);
+        showNotification('🎉', 'Опубликовано!', 'Вакансия добавлена');
       }
-    });
-
-    function escapeHtml(str){
-      return String(str)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/"/g,'&quot;')
-        .replace(/'/g,'&#39;');
-    }
-
-    $searchBtn.addEventListener('click', performSearch);
-    $q.addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(e); });
-    
-    $clear.addEventListener('click', () => {
-      $q.value = ''; 
-      $type.value = ''; 
-      $location.value = ''; 
-      $age.value = ''; 
-      $maxHours.value = '';
-      isShowingFavorites = false;
+      
+      saveJobsToStorage();
+      closeJobFormModal();
       visibleJobs = jobsData.slice();
       renderJobs(visibleJobs, true);
-      showNotification('🔄', 'Фильтры сброшены', 'Показаны все вакансии');
-    });
-    
-    $loadMore.addEventListener('click', () => renderJobs(visibleJobs, false));
-    $showFavs.addEventListener('click', showFavorites);
+    }
 
-    visibleJobs = jobsData.slice();
-    renderJobs(visibleJobs, true);
+    function deleteJob(jobId){
+      if(!confirm('Удалить вакансию?')) return;
+      const idx = jobsData.findIndex(j => j.id === jobId);
+      if(idx !== -1) { jobsData.splice(idx, 1); saveJobsToStorage(); }
+      closeJobFormModal();
+      visibleJobs = jobsData.slice();
+      renderJobs(visibleJobs, true);
+      showNotification('🗑️', 'Удалено', 'Вакансия удалена');
+    }
 
-    document.getElementById('searchBtn').addEventListener('click', () => {
-      document.getElementById('results-title').focus && document.getElementById('results-title').focus();
-    });
-
-    $age.addEventListener('focus', function() {
-      this.title = 'Введите ваш возраст от 14 до 17 лет';
-    });
-
-    window.TeenHustle = { 
-      jobsData, 
-      performSearch, 
-      showFavorites, 
-      loadFavorites, 
-      saveFavorites,
-      showNotification,
-      clearFavorites: function() {
-        saveFavorites([]);
-        updateFavCount();
-        if (isShowingFavorites && !isEmployerMode) {
-          showFavorites();
-        }
-        showNotification('🗑️', 'Избранное очищено', 'Все сохраненные вакансии удалены');
+    function showMyApplications(){
+      const apps = loadApplications().filter(a => a.email === currentUser.email);
+      const empty = document.getElementById('emptyApplicationsState');
+      const list = document.getElementById('applicationsList');
+      
+      if(apps.length) {
+        empty.style.display = 'none'; list.style.display = 'block';
+        list.innerHTML = apps.map(a => {
+          const job = jobsData.find(j => j.id === a.jobId);
+          return `<div class="application-item"><div class="application-title">${job ? escapeHtml(job.title) : 'Неизвестно'}</div><div class="application-status">✓ Отправлена</div></div>`;
+        }).join('');
+      } else {
+        empty.style.display = 'block'; list.style.display = 'none';
       }
-    };
-    
-    window.viewApplications = viewApplications;
-    window.editJob = editJob;
-    window.contactCandidate = contactCandidate;
+      document.getElementById('myApplicationsModal').style.display = 'flex';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadJobsFromStorage();
+      chats = loadChats();
+      messages = loadMessages();
+      
+      const savedUser = localStorage.getItem('currentUser');
+      if(savedUser) {
+        currentUser = JSON.parse(savedUser);
+        isEmployerMode = currentUser.mode === 'employer';
+        updateProfileUI();
+        updateChatsCount();
+        updateCandidatesCount();
+        showNotification('🔄', 'С возвращением!', currentUser.name);
+      } else {
+        document.getElementById('loginModal').style.display = 'flex';
+      }
+
+      document.getElementById('userTypeSeeker').addEventListener('change', updateAgeField);
+      document.getElementById('userTypeEmployer').addEventListener('change', updateAgeField);
+      
+      document.getElementById('loginForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const name = document.getElementById('loginName').value;
+        const email = document.getElementById('loginEmail').value;
+        const age = parseInt(document.getElementById('loginAge').value);
+        const mode = document.querySelector('input[name="userType"]:checked').value;
+        
+        if(mode === 'seeker' && (age < 14 || age > 17)) { showNotification('❌', 'Ошибка', 'Возраст 14-17'); return; }
+        if(mode === 'employer' && age < 18) { showNotification('❌', 'Ошибка', 'Возраст 18+'); return; }
+        
+        currentUser = {name, email, age, mode};
+        isEmployerMode = mode === 'employer';
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        document.getElementById('loginModal').style.display = 'none';
+        updateProfileUI();
+        updateActionButton();
+        updateFavsButton();
+        updateChatsCount();
+        updateCandidatesCount();
+        renderJobs(visibleJobs, true);
+        showNotification('✅', 'Успешно!', `Добро пожаловать, ${name}!`);
+      });
+
+      document.getElementById('closeLoginBtn').addEventListener('click', () => {
+        document.getElementById('loginModal').style.display = 'none';
+      });
+
+      document.getElementById('profileEditForm').addEventListener('submit', e => {
+        e.preventDefault();
+        currentUser.name = document.getElementById('editProfileName').value;
+        currentUser.email = document.getElementById('editProfileEmail').value;
+        currentUser.age = parseInt(document.getElementById('editProfileAge').value);
+        currentUser.bio = document.getElementById('editProfileBio').value;
+        currentUser.phone = document.getElementById('editProfilePhone').value;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        updateProfileUI();
+        document.getElementById('profileEditModal').style.display = 'none';
+        showNotification('✅', 'Профиль обновлён', 'Изменения сохранены');
+      });
+
+      document.getElementById('closeProfileEditModal').addEventListener('click', () => {
+        document.getElementById('profileEditModal').style.display = 'none';
+      });
+      document.getElementById('cancelProfileEdit').addEventListener('click', () => {
+        document.getElementById('profileEditModal').style.display = 'none';
+      });
+
+      document.getElementById('applyForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const name = document.getElementById('appName').value.trim();
+        const email = document.getElementById('appEmail').value.trim();
+        const age = Number(document.getElementById('appAge').value);
+        const skills = document.getElementById('appSkills').value.trim();
+        const motivation = document.getElementById('appMotivation').value.trim();
+        const note = document.getElementById('appNote').value.trim();
+        const jobId = document.getElementById('jobId').value;
+        
+        if(!name || !email || !skills) { showNotification('❌', 'Ошибка', 'Заполните поля'); return; }
+        
+        const apps = loadApplications();
+        apps.push({jobId, name, age, email, skills, motivation, note, timestamp: new Date().toISOString()});
+        saveApplications(apps);
+        closeModal();
+        showNotification('✅', 'Заявка отправлена!', 'Работодатель рассмотрит');
+      });
+
+      document.getElementById('jobForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const data = {
+          title: document.getElementById('jobTitle').value.trim(),
+          company: document.getElementById('jobCompany').value.trim(),
+          location: document.getElementById('jobLocation').value.trim(),
+          type: document.getElementById('jobType').value,
+          remote: document.getElementById('jobRemote').checked,
+          hoursPerWeek: document.getElementById('jobHours').value,
+          minAge: document.getElementById('jobMinAge').value,
+          description: document.getElementById('jobDescription').value.trim(),
+          salary: document.getElementById('jobSalary').value.trim()
+        };
+        if(!data.title || !data.location || !data.type || !data.description) {
+          showNotification('❌', 'Ошибка', 'Заполните обязательные поля');
+          return;
+        }
+        saveJob(data);
+      });
+
+      document.getElementById('jobTagsInput').addEventListener('keydown', e => {
+        if(e.key === 'Enter') { e.preventDefault(); addTagFromInput(); }
+      });
+
+      document.getElementById('deleteJobBtn').addEventListener('click', () => {
+        const id = document.getElementById('editingJobId').value;
+        if(id) deleteJob(id);
+      });
+
+      document.getElementById('chat-menu-btn').addEventListener('click', () => openChat());
+      document.getElementById('closeChatModal').addEventListener('click', () => {
+        document.getElementById('chatModal').style.display = 'none';
+      });
+      
+      document.getElementById('sendMessageBtn').addEventListener('click', () => {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if(text && currentChatId) {
+          sendMessage(currentChatId, currentUser.email, text);
+          input.value = '';
+          renderChatMessages();
+          renderChatList();
+        }
+      });
+
+      document.getElementById('chatInput').addEventListener('keydown', e => {
+        if(e.key === 'Enter') { e.preventDefault(); document.getElementById('sendMessageBtn').click(); }
+      });
+
+      document.getElementById('action-button').addEventListener('click', () => {
+        if(!currentUser) { document.getElementById('loginModal').style.display = 'flex'; return; }
+        isEmployerMode ? openJobForm() : showMyApplications();
+      });
+
+      document.getElementById('searchBtn').addEventListener('click', performSearch);
+      document.getElementById('q').addEventListener('keydown', e => { if(e.key === 'Enter') performSearch(e); });
+      document.getElementById('clear').addEventListener('click', () => {
+        document.getElementById('q').value = '';
+        document.getElementById('type').value = '';
+        document.getElementById('location').value = '';
+        document.getElementById('age').value = '';
+        document.getElementById('maxHours').value = '';
+        visibleJobs = jobsData.slice();
+        renderJobs(visibleJobs, true);
+      });
+      
+      document.getElementById('loadMore').addEventListener('click', () => renderJobs(visibleJobs, false));
+      document.getElementById('show-favs').addEventListener('click', showFavorites);
+      
+      document.getElementById('closeModal').addEventListener('click', closeModal);
+      document.getElementById('cancelApply').addEventListener('click', closeModal);
+      document.getElementById('closeEmployerModal').addEventListener('click', closeEmployerModal);
+      document.getElementById('cancelEmployerModal').addEventListener('click', closeEmployerModal);
+      document.getElementById('closeJobFormModal').addEventListener('click', closeJobFormModal);
+      document.getElementById('cancelJobForm').addEventListener('click', closeJobFormModal);
+      
+      document.getElementById('closeMyApplicationsModal').addEventListener('click', () => {
+        document.getElementById('myApplicationsModal').style.display = 'none';
+      });
+      document.getElementById('cancelMyApplicationsModal').addEventListener('click', () => {
+        document.getElementById('myApplicationsModal').style.display = 'none';
+      });
+
+      document.getElementById('dev-menu-btn').addEventListener('click', () => {
+        document.getElementById('devModal').style.display = 'flex';
+      });
+      document.getElementById('closeDevModal').addEventListener('click', () => {
+        document.getElementById('devModal').style.display = 'none';
+      });
+      document.getElementById('cancelDevModal').addEventListener('click', () => {
+        document.getElementById('devModal').style.display = 'none';
+      });
+
+      document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const feature = this.dataset.feature;
+          if(feature === 'profile') openProfileEdit();
+          else if(feature === 'messages') openChat();
+          else showNotification('🔧', 'В разработке', 'Функция скоро появится');
+        });
+      });
+
+      document.querySelectorAll('.footer-link').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          document.getElementById(e.target.dataset.page + 'Modal').style.display = 'flex';
+        });
+      });
+      
+      document.querySelectorAll('.close-footer-modal').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.getElementById(this.dataset.modal).style.display = 'none';
+        });
+      });
+
+      window.addEventListener('keydown', e => {
+        if(e.key === 'Escape') {
+          document.querySelectorAll('.modal-backdrop').forEach(m => m.style.display = 'none');
+        }
+      });
+
+      const profileToggle = document.getElementById('profileToggle');
+      const profileDropdown = document.getElementById('profileDropdown');
+      profileToggle.addEventListener('click', e => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('show');
+      });
+      document.addEventListener('click', () => profileDropdown.classList.remove('show'));
+      profileDropdown.addEventListener('click', e => e.stopPropagation());
+
+      visibleJobs = jobsData.slice();
+      renderJobs(visibleJobs, true);
+      
+      setTimeout(() => showNotification('👋', 'Добро пожаловать!', 'Teen Hustle'), 1000);
+    });
+
+    window.showNotification = showNotification;
+    window.removeTag = removeTag;
+    window.addTagFromInput = addTagFromInput;
+    window.openChat = openChat;
+    window.selectChat = selectChat;
+    window.startChatWithSeeker = startChatWithSeeker;
     window.acceptCandidate = acceptCandidate;
     window.rejectCandidate = rejectCandidate;
   </script>
